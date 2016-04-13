@@ -1,4 +1,35 @@
 <!DOCTYPE html>
+//zheng add php file here
+<?php 
+
+if(isset($_POST['submit'])) {
+    
+    
+    $minimun = 5;
+    $maximun = 30;
+
+$username = $_POST['username'];
+$password = $_POST['password'];
+    
+  if(strlen($username) < $minimun ) {
+  
+      echo "Username has to be longer than five";
+  
+  }  
+    
+    if(strlen($username) > $maximun  ) {
+  
+      echo "Username cannot be longer than 30 ";
+  
+  }  
+    
+
+
+}
+
+
+
+?>
 <html>
 <head>
 	<title>PHP Starter Application</title>
@@ -10,11 +41,15 @@
 	<div class="container">
 		<h1>Welcome</h1>
 		
-		<form class="form">
-			<input type="text" placeholder="Username">
-			<input type="password" placeholder="Password">
-			<button type="submit" id="login-button">Login</button>
-		</form>
+	
+		<form action="index.php" method="post">
+    
+<input type="text" name="username" placeholder="Enter Username">
+<input type="password"  name="password" placeholder="Enter Password"><br>
+<input type="submit" name="submit">
+    
+    
+</form>
 	</div>
 	
 	<ul class="bg-bubbles">
@@ -31,14 +66,6 @@
 	</ul>
 </div>
 
- <script type="text/javascript">
-    
- $("#login-button").click(function(event){
-		 event.preventDefault();
-	 
-	 $('form').fadeOut(500);
-	 $('.wrapper').addClass('form-success');
-});
 </script>
 </body>
 </html>
