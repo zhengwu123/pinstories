@@ -30,5 +30,15 @@
 		<li></li>
 	</ul>
 </div>
+
+ <script type="text/javascript">
+    
+ $("#login-button").click(function(event){
+		 event.preventDefault();
+	 
+	 $('form').fadeOut(500);
+	 $('.wrapper').addClass('form-success');
+});
+</script>
 </body>
 </html>
