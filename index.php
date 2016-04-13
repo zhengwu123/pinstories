@@ -3,7 +3,7 @@
 <?php 
 
 if(isset($_POST['submit'])) {
-    
+    echo "hello";
     
     $minimun = 5;
     $maximun = 30;
