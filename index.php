@@ -1,38 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>PHP Starter Application</title>
+	<title>Pinstories</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link href="bootstrap.css" rel="stylesheet">
+<link href="bootstrap-switch.css" rel="stylesheet">
+<script src="jquery.js"></script>
+<script src="bootstrap-switch.js"></script>
 </head>
 <body>
-<div class="wrapper">
-	<div class="container">
-		<h1>Welcome</h1>
-		
+$("[name='my-checkbox']").bootstrapSwitch();
+	<div class = "container">
+	<div class = "col-xs-6">
 	
-		<form action="process_form.php" method="post">
-    
-		<input type="text" name="username" placeholder="Enter Username">
-		<input type="password"  name="password" placeholder="Enter Password"><br>
-		<input type="submit" name="submit">
-    
-    	</form>
-	</div>
+		<form action="login.php" method="post">
+            <div class="form-group">
+            <label for="firstname">First Name</label>
+            <input type="text" name="firstname" class="form-control">
+            </div>
+
+            <div class="form-group">
+            <label for="lastname">Last Name</label>
+            <input type="text" name="lastname" class="form-control">
+            </div>
+
+            <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" name="email" class="form-control">
+            </div>
+            
+             <div class="form-group">
+                <label                                                                  for="password">Password</label>
+            <input type="password" name="password" class="form-control">
+            </div>
+            <div class="form-group">
+                <label                                                                  for="password">Gender</label>
+            <input type="checkbox" name="my-checkbox" class="form-control">
+            </div>
+            
+            <input class="btn btn-primary" type="submit" name="submit" value="CREATE">
+            
+        </form>
 	
-	<ul class="bg-bubbles">
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-	</ul>
-</div>
+	
 
 </body>
 </html>
