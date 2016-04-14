@@ -16,7 +16,7 @@
 <a href = "http://pinstories.mybluemix.net" class = "navbar-brand">PinStories</a>
 </div>
 <ul class = "nav navbar-nav navbar-right">
-<li><a href ="http://pinstories.mybluemix.net">Log In&nbsp&nbsp</a></li>
+<li><a href ="http://pinstories.mybluemix.net">Log In&nbsp;&nbsp;</a></li>
 </ul>
 </nav>
 	<div class = "container-fluid">
