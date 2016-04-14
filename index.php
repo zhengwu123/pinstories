@@ -10,8 +10,7 @@
 <script src="bootstrap-switch.js"></script>
 </head>
 <body>
-$("[name='my-checkbox']").bootstrapSwitch();
-	<div class = "container">
+	<div class = "container-fluid">
 	<div class = "col-xs-6">
 	
 		<form action="login.php" method="post">
@@ -35,11 +34,11 @@ $("[name='my-checkbox']").bootstrapSwitch();
             <input type="password" name="password" class="form-control">
             </div>
             <div class="form-group">
-                <label                                                                  for="password">Gender</label>
+                <label                                                                  for="my-checkbox">Gender</label>
             <input type="checkbox" name="my-checkbox" class="form-control">
             </div>
             
-            <input class="btn btn-success" type="submit" name="submit" value="CREATE">
+            <input class="btn btn-success" type="submit" name="submit" value="Submit">
             
         </form>
 	
