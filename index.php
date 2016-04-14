@@ -10,7 +10,7 @@
 <script src="bootstrap-switch.js"></script>
 </head>
 <body>
-<nav class = "nav navbar-reverse">
+<nav class = "nav navbar-inverse">
 <!-- logo -->
 <div class ="navbar-header">
 <a href = "http://pinstories.mybluemix.net" class = "navbar-brand">PinStories</a>
