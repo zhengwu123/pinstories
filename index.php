@@ -39,7 +39,7 @@ $("[name='my-checkbox']").bootstrapSwitch();
             <input type="checkbox" name="my-checkbox" class="form-control">
             </div>
             
-            <input class="btn btn-primary" type="submit" name="submit" value="CREATE">
+            <input class="btn btn-success" type="submit" name="submit" value="CREATE">
             
         </form>
 	
