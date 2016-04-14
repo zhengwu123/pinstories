@@ -43,7 +43,7 @@ $("[name='my-checkbox']").bootstrapSwitch();
             
         </form>
 	
-	
+	</div>
 
 </body>
 </html>
