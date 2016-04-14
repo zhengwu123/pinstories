@@ -10,9 +10,15 @@
 <script src="bootstrap-switch.js"></script>
 </head>
 <body>
+<nav class = "nav navbar-green">
+<!-- logo -->
 <div class ="navbar-header">
 <a href = "http://pinstories.mybluemix.net" class = "navbar-brand">PinStories</a>
 </div>
+<ul class = "nav navbar-nav navbar-right">
+<li><a href ="http://pinstories.mybluemix.net">Log In</a></li>
+</ul>
+</nav>
 	<div class = "container-fluid">
 	<div class = "col-xs-6">
 	
