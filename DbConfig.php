@@ -1,28 +1,10 @@
 <?php
-class Database
-{
-     
-    private $host = "localhost";
-    private $db_name = "dbtest";
-    private $username = "root";
-    private $password = "";
-    public $conn;
-     
-    public function dbConnection()
- {
-     
-     $this->conn = null;    
-        try
-  {
-            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
-   $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
-        }
-  catch(PDOException $exception)
-  {
-            echo "Connection error: " . $exception->getMessage();
-        }
-         
-        return $this->conn;
-    }
-}
+/**
+ * These are the database login details
+ */  
+define("HOST", "localhost");     // The host you want to connect to.
+define("USER", "zhengwu123");    // The database username. 
+define("PASSWORD", "wz5332005");    // The database password. 
+define("DATABASE", "pinstories");    // The database name.
+ define("SECURE", FALSE);
 ?>
