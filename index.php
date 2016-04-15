@@ -24,23 +24,23 @@
 	
 		<form action="login.php" method="post">
             <div class="form-group">
-            <label for="firstname">First Name</label>
-            <input type="text" name="firstname" class="form-control">
+            
+            <input type="text" name="firstname" class="form-control" placeholder="First name">
             </div>
 
             <div class="form-group">
-            <label for="lastname">Last Name</label>
-            <input type="text" name="lastname" class="form-control">
+          
+            <input type="text" name="lastname" class="form-control" placeholder="Last name">
             </div>
 
             <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" name="email" class="form-control">
+            
+            <input type="text" name="email" class="form-control" placeholder="Email">
             </div>
             
              <div class="form-group">
-                <label                                                                  for="password">Password</label>
-            <input type="password" name="password" class="form-control">
+                <label                                                             
+            <input type="password" name="password" class="form-control" placeholder="Password">
             </div>
             <div class="form-group">
                 <label                                                                  for="my-checkbox">Gender</label>
