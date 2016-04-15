@@ -43,7 +43,11 @@
             <input type="password" name="password" class="form-control" placeholder="Password">
             </div>
             
-            
+            <div class="btn-group" role="group" aria-label="...">
+  		<button type="button" class="btn btn-success">Male</button>
+  		<button type="button" class="btn btn-success">Female</button>
+  
+	</div>
             <input class="btn btn-success" type="submit" name="submit" value="Submit">
             
         </form>
