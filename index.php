@@ -39,13 +39,10 @@
             </div>
             
              <div class="form-group">
-                <label                                                             
+                                                                             
             <input type="password" name="password" class="form-control" placeholder="Password">
             </div>
-            <div class="form-group">
-                <label                                                                  for="my-checkbox">Gender</label>
-            <input type="checkbox" name="my-checkbox" class="form-control">
-            </div>
+            
             
             <input class="btn btn-success" type="submit" name="submit" value="Submit">
             
