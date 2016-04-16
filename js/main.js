@@ -1,5 +1,7 @@
 $(document).ready(function(){
-     
+     $('#email2').bind("cut copy paste",function(e) {
+          e.preventDefault();
+      });
 });
 function validateForm(){
     var firstName = $("#firstname").val(),

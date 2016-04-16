@@ -79,32 +79,34 @@
                   <div class="form-group has-feedback">
                     <input type="text" pattern="^[A-z]{1,}$" maxlength="20" class="form-control" id="firstname" name="fname" placeholder="First Name" required>
                     <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-                    <div class="help-block with-errors"></div>
+<!--                    <div class="help-block with-errors"></div>-->
                   </div>
                   <div class="form-group has-feedback">
                     <input type="text" pattern="^[A-z]{1,}$" maxlength="20" class="form-control" id="lastname" name="lname" placeholder="Last Name" required>
                     <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-                    <div class="help-block with-errors"></div>
+<!--                    <div class="help-block with-errors"></div>-->
                   </div>
                 </div>
                 <div class="container vertical">
                   <div class="row top-buffer">
-                    <div class="form-group">
+                    <div class="form-group has-feedback">
                       <input type="email" class="form-control" id="email1" name="email1" placeholder="Email" data-error="Invalid email address" required>
+                      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
                   <!-- End of row-->
                   <div class="row top-buffer">
-                    <div class="form-group">
+                    <div class="form-group has-feedback">
                       <input type="email" class="form-control" id="email2" name="email2" placeholder="Re-enter Email" data-match="#email1" data-match-error="Email doesn't match" required>
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
                   <!-- End of row -->
                   <div class="row top-buffer">
-                    <div class="form-group">
+                    <div class="form-group has-feedback">
                       <input type="password" data-minlength="6" class="form-control" id="new-password" name="new-password" placeholder="New Password" required>
+                      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                       <div class="help-block">Minimum of 6 characters</div>
                     </div>
                   </div>
@@ -123,7 +125,7 @@
                       </label> 
                       <label>
                       <input type="radio" id="male" name="optradio" value="1"  required/> Male
-                      </label> 
+                      </label>
                     </div>
                   </div>
                   <!-- End of row -->
