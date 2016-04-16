@@ -1,39 +1,39 @@
 
 <?php
-include "includes/'db_connect.php";
+
+include "includes/db_connect.php";
+
 if(isset($_POST['signUp'])){
 
 $firstname = $_POST['fname'];
 $lastname = $_POST['lname'];
 $email1 = $_POST['email1'];
 $email2 = $_POST['email2'];
-$password = $_POST['new-password'];
+$password = $_POST['newpassword'];
+$birthday = $_POST[birth[year]];
 
-//$birthday = $_POST['picker1'];
-echo $_POST['birth[month]'];
+echo "$birthday";
 $gender = $_POST['optradio'];
+$a = 1;
 
-if(!$mysqli ) {
-      die('Could not connect: ' . mysqli_error($mysqli));
-   }
-   
-   $sql = 'INSERT INTO user '.
-      '(first_name,last_name, email, password, gender, birthday) '.
-      'VALUES ( "$firstname", "$lastname", "$email1", "$new-password","1","2014-06-04")';
+
+   $sql = "INSERT INTO user ".
+    "(first_name,last_name,email,password,gender,birthday) ".
+    "VALUES ( '$firstname', '$lastname', '$email1', '$password','$gender','$birthday')";
       
    
-  if (mysqli_query($mysqli, $sql)) {
+  if (mysqli_query($connection, $sql)) {
     echo "New record created successfully";
 } else {
-    echo "Error: " . $sql . "<br>" . mysqli_error($mysqli);
+    echo "Error: " . $sql . "<br>" . mysqli_error($connection);
 }
    
-   mysqli_close($mysqli);
-
+   mysqli_close($connection);
 
 }
 
 ?>
+
 <!doctype html>
 <html class="no-js" lang="en-us">
   <head>
@@ -71,7 +71,7 @@ if(!$mysqli ) {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand navbar-brand-custom changeFont" href="http://pinstories.com">PinStories</a>
+            <a class="navbar-brand navbar-brand-custom changeFont" href="http://pinstories.mybluemix.net">PinStories</a>
           </div>
           <!-- End of navbar header -->
           <div id="navbar" class="collapse navbar-collapse">
@@ -84,7 +84,7 @@ if(!$mysqli ) {
                 <div class="form-group">
                   <input type="password" placeholder="Password" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-success" name="signUp">Log in</button>
+                <button type="submit" class="btn btn-success">Log in</button>
               </form>
             </div>
             <!-- End of login -->
@@ -110,35 +110,37 @@ if(!$mysqli ) {
             <!-- End of row -->
             <!-- Sign Up Info -->
             <div class="row">
-              <form action="index.php" data-toggle="validator" role="form" id="signup-form" method="post">
+              <form action="post" data-toggle="validator" role="form" id="signupform">
                 <div class="fullName form-inline">
                   <div class="form-group has-feedback">
-                    <input type="text" pattern="[A-z]{1,}$" maxlength="20" class="form-control" id="firstname" name="fname" placeholder="First Name" required>
-                    <span class="glyphicon form-control-feedback" aria-hidden="false"></span>
+                    <input type="text" pattern="^[A-z]{1,}$" maxlength="20" class="form-control" id="firstname" name="fname" placeholder="First Name" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                   </div>
                   <div class="form-group has-feedback">
                     <input type="text" pattern="^[A-z]{1,}$" maxlength="20" class="form-control" id="lastname" name="lname" placeholder="Last Name" required>
                     <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                   </div>
                 </div>
                 <div class="container vertical">
                   <div class="row top-buffer">
                     <div class="form-group">
-                      <input type="email" class="form-control" id="email1" name ="email1" placeholder="Email" data-error="Invalid email address" required>
+                      <input type="email" class="form-control" id="email1" name="email1" placeholder="Email" data-error="Invalid email address" required>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <!-- End of row-->
+                  <div class="row top-buffer">
+                    <div class="form-group">
+                      <input type="email" class="form-control" id="email2" name="email2" placeholder="Re-enter Email" data-match="#email1" data-match-error="Email doesn't match" required>
                       <div class="help-block with-errors"></div>
                     </div>
                   </div>
                   <!-- End of row -->
                   <div class="row top-buffer">
                     <div class="form-group">
-                      <input type="email" class="form-control" id="email2" name ="email2" placeholder="Re-enter Email" data-match="#email1" data-match-error="Email doesn't match"required>
-                      <div class="help-block with-errors"></div>
-                    </div>
-                  </div>
-                  <!-- End of row -->
-                  <div class="row top-buffer">
-                    <div class="form-group">
-                      <input type="password" data-minlength="6" class="form-control" name ="new-password" id="new-password" placeholder="New Password" required>
+                      <input type="password" data-minlength="6" class="form-control" id="new-password" name="new-password" placeholder="New Password" required>
                       <div class="help-block">Minimum of 6 characters</div>
                     </div>
                   </div>
@@ -146,10 +148,9 @@ if(!$mysqli ) {
                   <div class="row top-buffer">
                     <div class="form-group">
                       <label for="birthday">Birthday</label>
-                      <div class="picker" id="picker1" name="picker1" required></div>
+                      <div class="picker" id="picker1"></div>
                     </div>
                   </div>
-                  
                   <!-- End of row -->
                   <div class="row top-buffer">
                     <div class="btn-group" data-toggle="buttons">
@@ -157,14 +158,14 @@ if(!$mysqli ) {
                       <input type="radio" id="female" name="optradio" value="0" required/> Female
                       </label> 
                       <label>
-                      <input type="radio" id="male" name="optradio" value="1"/> Male
+                      <input type="radio" id="male" name="optradio" value="1"  required/> Male
                       </label> 
                     </div>
                   </div>
                   <!-- End of row -->
                   <div class="row top-buffer">
                     <hr>
-                    <button type="submit" class="btn btn-success btn-lg" id="submit" name= "signUp">Sign Up</button>  
+                    <button type="submit" class="btn btn-success btn-lg" id="submit" name="signUp">Sign Up</button>  
                   </div>
                   <!-- End of row -->
                 </div>
@@ -178,25 +179,25 @@ if(!$mysqli ) {
         <!-- End of row for img and signup form -->
       </div>
       <!-- End of Sign Up -->
-      
       <!-- Footer -->
       <div class="container text-center" id="copyright">
         <span>&copy; Copyright @ 2016</span>
       </div>
     </main>
     <!--<script src="http://code.jquery.com/jquery-2.0.0.min.js"></script>-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js">
-      <script src="js/plugins.js">
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <!--    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>-->
     <script src="js/main.js"></script>
     <script type="text/javascript" src="js/bday-picker.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
         $("#picker1").birthdaypicker({});
-      });   
+      });
     </script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="js/validator.min.js"></script>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
