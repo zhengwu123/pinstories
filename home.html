@@ -24,7 +24,8 @@
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <!-- Add your site or application content here -->
-    <!-- front end by maoxia -->
+    
+    <!-- front end by MAOXIA -->
     <main>
       <nav class="navbar navbar-inverse navbar-custom">
         <div class="container navbar-top-container">
@@ -35,7 +36,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand navbar-brand-custom changeFont" href="http://pinstories.mybluemix.net">PinStories</a>
+            <a class="navbar-brand navbar-brand-custom changeFont" href="http://pinstories.com">PinStories</a>
           </div>
           <!-- End of navbar header -->
           <div id="navbar" class="collapse navbar-collapse">
@@ -43,12 +44,12 @@
             <div class="container">
               <form class="navbar-form navbar-right">
                 <div class="form-group">
-                  <input type="email" placeholder="Email" class="form-control">
+                  <input type="email" placeholder="Email" class="form-control" name="login-account" id="login-account" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" placeholder="Password" class="form-control">
+                  <input type="password" placeholder="Password" class="form-control" name="login-password" id="login-password" required>
                 </div>
-                <button type="submit" class="btn btn-success">Log in</button>
+                <button type="submit" class="btn btn-success" id="login" name="login">Log in</button>
               </form>
             </div>
             <!-- End of login -->
@@ -131,7 +132,7 @@
                   <!-- End of row -->
                   <div class="row top-buffer">
                     <hr>
-                    <button type="submit" class="btn btn-success btn-lg" id="submit" name="signUp">Sign Up</button>  
+                    <button type="button" class="btn btn-success btn-lg" id="submit" name="signUp">Sign Up</button>  
                   </div>
                   <!-- End of row -->
                 </div>

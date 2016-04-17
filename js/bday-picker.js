@@ -78,9 +78,9 @@
 
       // Add the option placeholders if specified
       if (settings["placeholder"]) {
-        $("<option value='0'>Year:</option>").appendTo($year);
-        $("<option value='0'>Month:</option>").appendTo($month);
-        $("<option value='0'>Day:</option>").appendTo($day);
+        $("<option value=''>Year:</option>").appendTo($year);
+        $("<option value=''>Month:</option>").appendTo($month);
+        $("<option value=''>Day:</option>").appendTo($day);
       }
 
       var hiddenDate;
