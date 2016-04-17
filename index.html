@@ -1,97 +1,5 @@
 
-<?php include "includes/db_connect.php"; ?>
 
-<?php
-   ob_start();
-   session_start();
-?>
-
-
-<?php
-//these chunk of php code here is for register
-
-if(isset($_POST['signUp'])){
-
-$firstname = $_POST['fname'];
-$lastname = $_POST['lname'];
-$email1 = $_POST['email1'];
-$email2 = $_POST['email2'];
-$password = $_POST['new-password'];
-
-$year = $_POST['birth-year'];
-$month = $_POST['birth-month'];
-$day = $_POST['birth-day'];
-$birthday = $year."-".$month."-".$day;
-
-//$birthday = year.month.day;
-$gender = $_POST['optradio'];
-
-
-   $sql = "INSERT INTO user ".
-    "(first_name,last_name,email,password,gender,birthday) ".
-    "VALUES ( '$firstname', '$lastname', '$email1', '$password','$gender','$birthday')";
-      
-   
-  if (mysqli_query($connection, $sql)) {
-
-echo '<script language="javascript">';
-echo 'alert("register successfully ")';
-echo '</script>';
-} else {
-echo '<script language="javascript">';
-echo 'alert(""Error: " . $sql . "<br>" . mysqli_error($connection)")';
-echo '</script>';
-}
-   
-   mysqli_close($connection);
-
-}
-
-?>
-
-<?php
-//this chunk of php code here is for login
-           
-            
-            if (isset($_POST['login']) && !empty($_POST['login-account']) 
-               && !empty($_POST['login-password'])) {
-              $email = $_POST['login-account'];
-              $password = $_POST['login-password'];
-                $sql = "SELECT email, password FROM user WHERE email = '".$email."' AND  password = '".$password."'";
-                  $retval = mysqli_query($connection,$sql);
-                if(! $retval )
-                    {
-                    echo '<script language="javascript">';
-                    echo 'alert("open data error ")';
-                    echo '</script>';
-                    die('Could not get data: ' . mysqli_error());
-                      }
-                     
-
-                if(mysqli_num_rows($retval) > 0 )
-                  { 
-                    echo '<script language="javascript">';
-                    echo 'alert("login successfully ")';
-                    echo '</script>';
-                  $_SESSION['valid'] = true;
-                  $_SESSION['timeout'] = time();
-                  $_SESSION['email'] = $email;
-               echo '<script language="javascript">';
-                    echo 'window.location = "http://pinstories.com/38_39_40_login.php"';
-                    echo '</script>';
-               }
-               else{
-
-                echo '<script language="javascript">';
-                    echo 'alert("Invalid email address")';
-                    echo '</script>';
-               }
-                
-                 mysqli_close($connection);
-
-               }
-            
-         ?>
 
 <!doctype html>
 <html class="no-js" lang="en-us">
@@ -210,7 +118,7 @@ echo '</script>';
                   <div class="row top-buffer">
                     <div class="form-group">
                       <label for="birthday">Birthday</label>
-                      <div class="picker" id="picker1" name ="picker1"></div>
+                      <div class="picker" id="picker1"></div>
                     </div>
                   </div>
                   <!-- End of row -->
