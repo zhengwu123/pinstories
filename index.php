@@ -1,7 +1,15 @@
 
-<?php
+<?php include "includes/db_connect.php"; ?>
 
-include "includes/db_connect.php";
+<?php
+   ob_start();
+   session_start();
+?>
+
+
+
+<?php
+//these chunk of php code here is for register
 
 if(isset($_POST['signUp'])){
 
@@ -9,12 +17,11 @@ $firstname = $_POST['fname'];
 $lastname = $_POST['lname'];
 $email1 = $_POST['email1'];
 $email2 = $_POST['email2'];
-$password = $_POST['newpassword'];
-$birthday = $_POST[birth[year]];
+$password = $_POST['new-password'];
 
-echo "$birthday";
+
+//$birthday = year.month.day;
 $gender = $_POST['optradio'];
-$a = 1;
 
 
    $sql = "INSERT INTO user ".
@@ -23,9 +30,14 @@ $a = 1;
       
    
   if (mysqli_query($connection, $sql)) {
-    echo "New record created successfully";
+
+echo '<script language="javascript">';
+echo 'alert("register successfully ")';
+echo '</script>';
 } else {
-    echo "Error: " . $sql . "<br>" . mysqli_error($connection);
+    echo '<script language="javascript">';
+echo 'alert(""Error: " . $sql . "<br>" . mysqli_error($connection)")';
+echo '</script>';
 }
    
    mysqli_close($connection);
@@ -33,6 +45,37 @@ $a = 1;
 }
 
 ?>
+
+<?php
+//this chunk of php code here is for login
+           
+            
+            if (isset($_POST['login']) && !empty($_POST['email']) 
+               && !empty($_POST['password'])) {
+
+              $sql = 'SELECT $_POST['email'], $_POST['password'], 
+              
+                FROM user';
+                  $retval = mysql_query( $sql, $connection );
+                if(! $retval )
+                    {
+                    die('Could not get data: ' . mysql_error());
+                      }
+                    $row = mysql_fetch_assoc($retval);
+
+               if ($_POST['email'] == '$row[email]' && 
+                  $_POST['password'] == '$row[password]') {
+                  $_SESSION['valid'] = true;
+                  $_SESSION['timeout'] = time();
+                  $_SESSION['username'] = '$row[email]';
+                  header("Location: http://www.pinstories.com/38_39_40_login.php"); 
+                 
+               }
+                
+                 
+               }
+            
+         ?>
 
 <!doctype html>
 <html class="no-js" lang="en-us">
@@ -71,7 +114,7 @@ $a = 1;
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand navbar-brand-custom changeFont" href="http://pinstories.mybluemix.net">PinStories</a>
+            <a class="navbar-brand navbar-brand-custom changeFont" href="http://pinstories.com">PinStories</a>
           </div>
           <!-- End of navbar header -->
           <div id="navbar" class="collapse navbar-collapse">
@@ -79,12 +122,12 @@ $a = 1;
             <div class="container">
               <form class="navbar-form navbar-right">
                 <div class="form-group">
-                  <input type="email" placeholder="Email" class="form-control">
+                  <input type="email" placeholder="Email" name="email"class="form-control">
                 </div>
                 <div class="form-group">
-                  <input type="password" placeholder="Password" class="form-control">
+                  <input type="password" placeholder="Password" name="password"class="form-control">
                 </div>
-                <button type="submit" class="btn btn-success">Log in</button>
+                <button type="submit" class="btn btn-success" name="login">Log in</button>
               </form>
             </div>
             <!-- End of login -->
@@ -110,7 +153,7 @@ $a = 1;
             <!-- End of row -->
             <!-- Sign Up Info -->
             <div class="row">
-              <form action="post" data-toggle="validator" role="form" id="signupform">
+              <form action="index.php" data-toggle="validator" role="form" id="signupform" method="post">
                 <div class="fullName form-inline">
                   <div class="form-group has-feedback">
                     <input type="text" pattern="^[A-z]{1,}$" maxlength="20" class="form-control" id="firstname" name="fname" placeholder="First Name" required>
@@ -148,7 +191,7 @@ $a = 1;
                   <div class="row top-buffer">
                     <div class="form-group">
                       <label for="birthday">Birthday</label>
-                      <div class="picker" id="picker1"></div>
+                      <div class="picker" id="picker1" name="picker1"></div>
                     </div>
                   </div>
                   <!-- End of row -->
