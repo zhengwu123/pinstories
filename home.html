@@ -42,7 +42,7 @@
           <div id="navbar" class="collapse navbar-collapse">
             <!-- Login -->
             <div class="container">
-              <form class="navbar-form navbar-right">
+              <form class="navbar-form navbar-right" action="index.php" method="post">
                 <div class="form-group">
                   <input type="email" placeholder="Email" class="form-control" name="login-account" id="login-account" required>
                 </div>
@@ -75,7 +75,7 @@
             <!-- End of row -->
             <!-- Sign Up Info -->
             <div class="row">
-              <form action="" data-toggle="validator" role="form" id="signupform">
+              <form action="" data-toggle="validator" role="form" id="signupform" method="">
                 <div class="fullName form-inline">
                   <div class="form-group has-feedback">
                     <input type="text" pattern="^[A-z]{1,}$" maxlength="20" class="form-control" id="firstname" name="fname" placeholder="First Name" required>
@@ -132,7 +132,7 @@
                   <!-- End of row -->
                   <div class="row top-buffer">
                     <hr>
-                    <button type="button" class="btn btn-success btn-lg" id="submit" name="signUp">Sign Up</button>  
+                    <button type="submit" class="btn btn-success btn-lg" id="submit" name="signUp">Sign Up</button>  
                   </div>
                   <!-- End of row -->
                 </div>
@@ -163,7 +163,7 @@
     </script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
     <script src="js/validator.min.js"></script>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>

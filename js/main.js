@@ -4,11 +4,20 @@ $(document).ready(function(){
           e.preventDefault();
       });
     
-    $('#login').on('click', function(){
-        //get user account and password
-        getUserAccountAndPass();
-    });
-//     $('#submit').on('click', function(){
+//    //after user hits login btn
+//    $('#login').submit(function(event){
+//        // Stop form from submitting normally
+//        event.preventDefault();
+//        
+//        //get user inputs
+//        var login = getAccountAndPass();
+//        //send inputs to server
+//        $.post("index.php", {data: login}, function(results){
+//            console.log(results);
+//        });
+//    });
+    
+     $('#submit').on('click', function(){
 //         var res = checkFormFilledOutOrNot();
 //         if (res == true){
 //             getVals();
@@ -16,12 +25,17 @@ $(document).ready(function(){
 //         else {
 //             console.log("failure");
 //         }
-//     });
+         getVals();
+     });
 });
 
-function getUserAccountAndPass(){
-    var account = $('#login-account').val();
-    console.log(account);
+function getAccountAndPass(){
+    //get user inputs
+    var login ={
+        accout: $('#login-account').val(),
+        pass: $('#login-password').val()
+    };
+    return login;
 }
 
 function checkFormFilledOutOrNot(){
@@ -51,7 +65,6 @@ function checkFormFilledOutOrNot(){
 }
 
 function getVals(){
-    console.log("called function");
     var firstName = $("#firstname").val(),
         lastName = $("#lastname").val(),
         email1 = $("#email1").val(),
@@ -62,5 +75,5 @@ function getVals(){
         year = $("#birth-year").val(),
         female = $("#female").val(),
         male = $("#male").val();
-        console.log(year);
+        console.log("Print year: " + year);
 }
