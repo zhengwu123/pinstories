@@ -35,7 +35,7 @@ echo '<script language="javascript">';
 echo 'alert("register successfully ")';
 echo '</script>';
 } else {
-    echo '<script language="javascript">';
+echo '<script language="javascript">';
 echo 'alert(""Error: " . $sql . "<br>" . mysqli_error($connection)")';
 echo '</script>';
 }
@@ -52,27 +52,30 @@ echo '</script>';
             
             if (isset($_POST['login']) && !empty($_POST['email']) 
                && !empty($_POST['password'])) {
-
-              $sql = 'SELECT $_POST['email'], $_POST['password'], 
-              
-                FROM user';
-                  $retval = mysql_query( $sql, $connection );
+              $email = $_POST['email'];
+              $password = $_POST['password'];
+                $sql = "SELECT email, password FROM user WHERE email = '".$email."' AND  password = '".$password."'";
+                  $retval = mysqli_query( $sql, $connection );
                 if(! $retval )
                     {
-                    die('Could not get data: ' . mysql_error());
+                    die('Could not get data: ' . mysqli_error());
                       }
-                    $row = mysql_fetch_assoc($retval);
+                     
 
-               if ($_POST['email'] == '$row[email]' && 
-                  $_POST['password'] == '$row[password]') {
+                if(mysqli_num_rows($retval) > 0 )
+                  { 
+                    echo '<script language="javascript">';
+                    echo 'alert("login successfully ")';
+                    echo '</script>';
                   $_SESSION['valid'] = true;
                   $_SESSION['timeout'] = time();
-                  $_SESSION['username'] = '$row[email]';
+                  $_SESSION['email'] = $email;
                   header("Location: http://www.pinstories.com/38_39_40_login.php"); 
                  
                }
                 
-                 
+                 mysqli_close($connection);
+
                }
             
          ?>
