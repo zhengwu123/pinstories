@@ -44,9 +44,9 @@
 
       // Create the html picker skeleton
       var $fieldset = $("<fieldset class='birthday-picker'></fieldset>"),
-          $year = $("<select class='birth-year' name='birth[year]' id='birth-year' required></select>"),
-          $month = $("<select class='birth-month' name='birth[month]' id='birth-month'  required></select>"),
-          $day = $("<select class='birth-day' name='birth[day]' id='birth-day' required></select>");
+          $year = $("<select class='birth-year' name='birth-year' id='birth-year' required></select>"),
+          $month = $("<select class='birth-month' name='birth-month' id='birth-month'  required></select>"),
+          $day = $("<select class='birth-day' name='birth-day' id='birth-day' required></select>");
 
       if (settings["legend"]) { $("<legend>" + settings["legend"] + "</legend>").appendTo($fieldset); }
 
@@ -78,9 +78,9 @@
 
       // Add the option placeholders if specified
       if (settings["placeholder"]) {
-        $("<option value=''>Year:</option>").appendTo($year);
-        $("<option value=''>Month:</option>").appendTo($month);
-        $("<option value=''>Day:</option>").appendTo($day);
+        $("<option value='0'>Year:</option>").appendTo($year);
+        $("<option value='0'>Month:</option>").appendTo($month);
+        $("<option value='0'>Day:</option>").appendTo($day);
       }
 
       var hiddenDate;
