@@ -150,25 +150,12 @@ a.navbar-brand.navbar-brand-custom {
     border-color: #f4a728;
 }
 
+
 #copyright {
-    position: relative;
-    bottom: 0;
-
-    /* And if you want the div to be full-width: */
-    left: 0;
-    right: 0;
+    padding-top: 12%;
+    position: fixed;
+    border: 0;
 }
-
-#forgetpassword {
-    padding-left: 6.7%;
-    padding-right: 0%;
-}
-
-#fplink {
-    color: grey;
-}
-
-
 /* ==========================================================================
    Helper classes
    ========================================================================== */
