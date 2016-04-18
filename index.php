@@ -12,11 +12,11 @@
 
 if(isset($_POST['signUp'])){
 
-$firstname = $_POST['fname'];
-$lastname = $_POST['lname'];
-$email1 = $_POST['email1'];
-$email2 = $_POST['email2'];
-$password = $_POST['new-password'];
+$firstname = mysqli_real_escape_string($connection,$_POST['fname']);
+$lastname = mysqli_real_escape_string($connection,$_POST['lname']);
+$email1 = mysqli_real_escape_string($connection,$_POST['email1']);
+$email2 = mysqli_real_escape_string($connection,$_POST['email2']);
+$password = mysqli_real_escape_string($connection,$_POST['new-password']);
 
 $year = $_POST['birth-year'];
 $month = $_POST['birth-month'];
@@ -55,8 +55,8 @@ echo '</script>';
             
             if (isset($_POST['login']) && !empty($_POST['login-account']) 
                && !empty($_POST['login-password'])) {
-              $email = $_POST['login-account'];
-              $password = $_POST['login-password'];
+              $email = mysqli_real_escape_string($connection,$_POST['login-account']);
+              $password = mysqli_real_escape_string($connection,$_POST['login-password']);
                 $sql = "SELECT email, password FROM user WHERE email = '".$email."' AND  password = '".$password."'";
                   $retval = mysqli_query($connection,$sql);
                 if(! $retval )
