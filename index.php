@@ -77,7 +77,7 @@ echo '</script>';
                   $_SESSION['timeout'] = time();
                   $_SESSION['email'] = $email;
                echo '<script language="javascript">';
-                    echo 'window.location = "http://pinstories.com/38_39_40_login.php"';
+                    echo 'window.location = "http://pinstories.com/mainApp.php"';
                     echo '</script>';
                }
                else{
@@ -210,7 +210,7 @@ echo '</script>';
                   <div class="row top-buffer">
                     <div class="form-group">
                       <label for="birthday">Birthday</label>
-                      <div class="picker" id="picker1" name ="picker1"></div>
+                      <div class="picker" id="picker1"></div>
                     </div>
                   </div>
                   <!-- End of row -->
