@@ -101,6 +101,10 @@
 
 /* Sidebar Styles */
 
+div#sidebar-wrapper {
+    background: #f4a728;
+}
+
 .sidebar-nav {
     position: absolute;
     top: 0;
@@ -118,7 +122,7 @@
 .sidebar-nav li a {
     display: block;
     text-decoration: none;
-    color: #999999;
+    color: #fff;
 }
 
 .sidebar-nav li a:hover {
@@ -139,11 +143,11 @@
 }
 
 .sidebar-nav > .sidebar-brand a {
-    color: #999999;
+    color: #fff;
 }
 
 .sidebar-nav > .sidebar-brand a:hover {
-    color: #fff;
+    color: lightgray;
     background: none;
 }
 

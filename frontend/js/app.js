@@ -1,6 +1,6 @@
 var map = null;
 var infoWindow;
-
+var chicago = {lat: 41.85, lng: -87.65};
 function initialize() {
   var myWrapper = $("#wrapper");
   $("#menu-toggle").click(function(e) {
@@ -13,11 +13,16 @@ function initialize() {
   });
   //add attr to map
     var mapOptions = {
-     center: new google.maps.LatLng(39.739666, -86.149292),
+     center: chicago,
      zoom: 12,
+     disableDefaultUI: true,
      mapTypeControl: true,
      mapTypeControlOptions: {
       style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+     },
+     zoomControl: true,
+     zoomControlOptions: {
+        position: google.maps.ControlPosition.RIGHT_CENTER
      },
      navigationControl: true,
      mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -72,6 +77,9 @@ function initialize() {
       infoWindow.open(map, marker);
  });
 });
+    
+    //disable autocomplete input field
+    
     
 }
 
