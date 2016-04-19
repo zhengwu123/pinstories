@@ -1,6 +1,6 @@
 
 <?php include "includes/db_connect.php"; ?>
-
+<?php include "includes/functions.php"; ?>
 <?php
    ob_start();
    session_start();
@@ -26,8 +26,23 @@ $birthday = $year."-".$month."-".$day;
 
 //$birthday = year.month.day;
 $gender = $_POST['optradio'];
+    $sql = "SELECT email FROM user WHERE email='$email1'" 
+      
+    $retval = mysqli_query($connection,$sql);
+                if(! $retval )
+                    {
+                    echo '<script language="javascript">';
+                    echo 'alert("open data error ")';
+                    echo '</script>';
+                    die('Could not get data: ' . mysqli_error());
+                      }
+                      if(mysqli_num_rows($retval) > 0 ){
+                        echo '<script language="javascript">';
+                       echo 'alert("email already registered, please try another email")';
+                        echo '</script>';
 
-
+                      }
+                  else{
    $sql = "INSERT INTO user ".
     "(first_name,last_name,email,password,gender,birthday) ".
     "VALUES ( '$firstname', '$lastname', '$email1', '$password','$gender','$birthday')";
@@ -43,7 +58,7 @@ echo '<script language="javascript">';
 echo 'alert(""Error: " . $sql . "<br>" . mysqli_error($connection)")';
 echo '</script>';
 }
-   
+ }  
    mysqli_close($connection);
 
 }
