@@ -109,7 +109,7 @@ html, body {
 }
 
 div#page-content-wrapper {
-    padding: 0 1.5em 2em 2em;
+    padding: 0 0 2em 2em;
 }
 
 div.container-fluid {
@@ -122,6 +122,20 @@ div.row.map-place {
 
 div.col-lg-12.map-place {
     padding: 0;
+}
+
+#autocomplete {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    width: 70%;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
 }
 
 .map-place {
