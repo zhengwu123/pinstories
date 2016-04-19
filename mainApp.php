@@ -29,7 +29,12 @@ header("Location: index.php");
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+        <style>
+      #map {
+        width: 900px;
+        height: 500px;
+      }
+    </style>
 </head>
 
 <body>
@@ -63,8 +68,18 @@ header("Location: index.php");
                 <div class="row">
                     <div class="col-lg-12">
                         <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
-                        <!-- Izzy your code should be here-->
-                        <!-- PLEASE put your code under this line, OK?-->
+                        <div id="map"></div>
+    <script>
+      function initMap() {
+        var mapDiv = document.getElementById('map');
+        var map = new google.maps.Map(mapDiv, {
+          center: {lat: 44.540, lng: -78.546},
+          zoom: 8
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+        async defer></script>
 
 
                     </div>

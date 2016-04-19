@@ -4,6 +4,7 @@
 <?php
    ob_start();
    session_start();
+   error_reporting(0);
 ?>
 
 
@@ -243,7 +244,7 @@ echo '</script>';
       <!-- End of Sign Up -->
       <!-- Footer -->
       <div class="container text-center" id="copyright">
-        <span>&copy; Copyright @ 2016</span>
+        <span>&copy; Copyright @ <?php echo date("Y");?>/span>
       </div>
     </main>
     <!--<script src="http://code.jquery.com/jquery-2.0.0.min.js"></script>-->
