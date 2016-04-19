@@ -1,6 +1,7 @@
 var map = null;
 var infoWindow;
 var chicago = {lat: 41.85, lng: -87.65};
+var userLocation;
 function initialize() {
   var myWrapper = $("#wrapper");
   $("#menu-toggle").click(function(e) {
@@ -27,11 +28,19 @@ function initialize() {
      navigationControl: true,
      mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
     
-  google.maps.event.addListener(map, 'click', function() {
-    infoWindow.close();
-  });
+    // Create the DIV to hold the control and call the CenterControl()
+    // constructor passing in this DIV.
+    var centerControlDiv = document.createElement('div');
+    var centerControl = new CenterControl(centerControlDiv, map);
+
+    centerControlDiv.index = 1;
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerControlDiv);
+    
+    google.maps.event.addListener(map, 'click', function() {
+        infoWindow.close();
+    });
     
     
     if (navigator.geolocation) {
@@ -44,6 +53,8 @@ function initialize() {
         infoWindow.setPosition(pos);
         infoWindow.setContent('Location found.');
         map.setCenter(pos);
+        //update user location
+        userLocation = pos;
     }, function() {
         handleLocationError(true, infoWindow, map.getCenter());
        });
@@ -75,13 +86,9 @@ function initialize() {
      google.maps.event.addListener(marker, 'click', function(e) {
 
       infoWindow.open(map, marker);
- });
-});
-    
-    //disable autocomplete input field
-    
-    
-}
+        });
+    });
+}//end of function initialize
 
 
 // Try HTML5 geolocation.
@@ -91,6 +98,38 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   'Error: The Geolocation service failed.' :
   'Error: Your browser doesn\'t support geolocation.');
 }
+
+function CenterControl(controlDiv, map) {
+
+  // Set CSS for the control border.
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#fff';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.marginTop ='10px';
+  controlUI.style.marginRight = '10px';   
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  //controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click to recenter the map';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior.
+  var controlIcon = document.createElement('div');
+  //controlIcon.style.backgroundImage = url('images/black_icon.png');
+  controlIcon.style.backgroundImage = "url('images/" + "mylocation-sprite-cookieless-v2-2x.png')"
+  //controlIcon.style.backgroundColor = 'rgb(25,25,25)';
+  controlIcon.style.height = '36px';
+  controlIcon.style.width = '36px';   
+  controlUI.appendChild(controlIcon);
+
+  // Setup the click event listeners: simply set the map to Chicago.
+  controlUI.addEventListener('click', function() {
+    map.setCenter(userLocation);
+  });
+}
+
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
