@@ -1,26 +1,35 @@
 var map = null;
 var infoWindow;
 
-function initialize(){
-    var myWrapper = $("#wrapper");
-//    $("#menu-toggle").click(function(e) {
-//        e.preventDefault();
-//        $("#wrapper").toggleClass("toggled");
-////        myWrapper.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(e) {
-////          // code to execute after transition ends
-////          
-////        });
-//        google.maps.event.trigger(map, 'resize');
-//    });
-    //add attr to map
+function initialize() {
+  var myWrapper = $("#wrapper");
+  $("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+    myWrapper.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(e) {
+      // code to execute after transition ends
+      google.maps.event.trigger(map, 'resize');
+    });
+  });
+  //add attr to map
     var mapOptions = {
-     center: new google.maps.LatLng(37.7831, -122.4039),
+     center: new google.maps.LatLng(39.739666, -86.149292),
      zoom: 12,
+     mapTypeControl: true,
+     mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+     },
+     navigationControl: true,
      mapTypeId: google.maps.MapTypeId.ROADMAP
     };
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  infoWindow = new google.maps.InfoWindow();
     
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
-    infoWindow = new google.maps.InfoWindow();
+  google.maps.event.addListener(map, 'click', function() {
+    infoWindow.close();
+  });
+    
+    
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
         var pos = {
@@ -57,6 +66,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   'Error: The Geolocation service failed.' :
   'Error: Your browser doesn\'t support geolocation.');
 }
+
 
 google.maps.event.addDomListener(window, 'load', initialize);
 //google.maps.event.addListener(autocomplete, 'place_changed', function() {

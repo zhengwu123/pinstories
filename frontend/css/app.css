@@ -96,6 +96,7 @@ textarea {
    ========================================================================== */
 html, body {
         height: 100%;
+        border: 0;
         }
 
 #wrapper, 
@@ -108,7 +109,7 @@ html, body {
 }
 
 div#page-content-wrapper {
-    padding: 0;
+    padding: 0 0 0 1em;
 }
 
 div.container-fluid {
@@ -125,6 +126,7 @@ div.col-lg-12.map-place {
 
 .map-place {
     margin: 0;
+    overflow: auto;
 }
 
 
