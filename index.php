@@ -1,10 +1,11 @@
 
-<?php include "includes/db_connect.php"; ?>
-<?php include "includes/functions.php"; ?>
+<?php include "includes/db_connect.php"; 
+      include "includes/functions.php";
+?>
 <?php
    ob_start();
    session_start();
-   error_reporting(0);
+   //error_reporting(0);
 ?>
 
 
@@ -18,7 +19,8 @@ $lastname = mysqli_real_escape_string($connection,$_POST['lname']);
 $email1 = mysqli_real_escape_string($connection,$_POST['email1']);
 $email2 = mysqli_real_escape_string($connection,$_POST['email2']);
 $password = mysqli_real_escape_string($connection,$_POST['new-password']);
-
+$hashValue = md5($email1 + microtime());
+$GLOBALS['globalhash'] = $hashValue;
 $year = $_POST['birth-year'];
 $month = $_POST['birth-month'];
 $day = $_POST['birth-day'];
@@ -26,33 +28,42 @@ $birthday = $year."-".$month."-".$day;
 
 //$birthday = year.month.day;
 $gender = $_POST['optradio'];
-    $sql = "SELECT email FROM user WHERE email='$email1'" 
+//check for if the email already exist in the database
+    $sqlemail = "SELECT email FROM user WHERE email = '$email1'";
       
-    $retval = mysqli_query($connection,$sql);
-                if(! $retval )
+    $retemail = mysqli_query($connection,$sqlemail);
+                if(! $retemail )
                     {
                     echo '<script language="javascript">';
                     echo 'alert("open data error ")';
                     echo '</script>';
                     die('Could not get data: ' . mysqli_error());
                       }
-                      if(mysqli_num_rows($retval) > 0 ){
-                        echo '<script language="javascript">';
-                       echo 'alert("email already registered, please try another email")';
-                        echo '</script>';
 
+                      if(mysqli_num_rows($retemail) > 0 ){
+                        echo '<script language="javascript">';
+                        echo 'alert("email already registered, please try another email")';
+                        echo '</script>';
+                        echo '<script language="javascript">';
+                        echo 'window.location = "http://pinstories.com/index.php"';
+                        echo '</script>';
                       }
-                  else{
-   $sql = "INSERT INTO user ".
-    "(first_name,last_name,email,password,gender,birthday) ".
-    "VALUES ( '$firstname', '$lastname', '$email1', '$password','$gender','$birthday')";
+
+                  else {
+
+           $sql = "INSERT INTO user ".
+          "(first_name,last_name,email,password,gender,birthday,hash) ".
+          "VALUES ( '$firstname', '$lastname', '$email1', '$password','$gender','$birthday','$hashValue')";
       
    
   if (mysqli_query($connection, $sql)) {
 
-echo '<script language="javascript">';
-echo 'alert("register successfully ")';
-echo '</script>';
+  echo '<script language="javascript">';
+  echo 'alert("register successfully ")';
+  echo '</script>';
+  echo '<script language="javascript">';
+   echo 'window.location = "http://pinstories.com/emailValidation.php"';
+   echo '</script>';
 } else {
 echo '<script language="javascript">';
 echo 'alert(""Error: " . $sql . "<br>" . mysqli_error($connection)")';
@@ -92,14 +103,14 @@ echo '</script>';
                   $_SESSION['valid'] = true;
                   $_SESSION['timeout'] = time();
                   $_SESSION['email'] = $email;
-               echo '<script language="javascript">';
+                     echo '<script language="javascript">';
                     echo 'window.location = "http://pinstories.com/mainApp.php"';
                     echo '</script>';
                }
                else{
 
                 echo '<script language="javascript">';
-                    echo 'alert("Invalid email address")';
+                    echo 'alert("Invalid email address or password")';
                     echo '</script>';
                }
                 
