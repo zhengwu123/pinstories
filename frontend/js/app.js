@@ -61,7 +61,7 @@ function initialize() {
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
  //GeoMarker = new GeolocationMarker(map);
  
- // Create the DIV to hold the center control and call the CenterControl()
+ // Create the DIV to hold the CENTER control and call the CenterControl()
  // constructor passing in this DIV.
  var centerControlDiv = document.createElement('div');
  var centerControl = new CenterControl(centerControlDiv, map);
@@ -70,14 +70,21 @@ function initialize() {
  // Append the center control on google map
  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerControlDiv);
  
- // Create div to hold pinControl
+ // Create div to hold PIN Control
  var pinControlDiv = document.createElement('div');
  var pinControl = new PinControl(pinControlDiv, map);
 
  pinControlDiv.index = 1;
  // Append the pin control on google map
  map.controls[google.maps.ControlPosition.LEFT_TOP].push(pinControlDiv);
-     
+ 
+ // Create div to hold SELECT Control
+ var selectControlDiv = document.createElement('div');
+ var selectControl = new SelectControl(selectControlDiv, map);
+
+ selectControlDiv.index = 1;
+ // Append the select control on google map
+ map.controls[google.maps.ControlPosition.LEFT_TOP].push(selectControlDiv);
     
  // Add event action when user click on map    
  google.maps.event.addListener(map, 'click', function(){
@@ -223,9 +230,39 @@ function PinControl(controlDiv, map) {
     
  // Setup the click event listeners: let user put pin on map
  controlUI.addEventListener('click', function() {
-    console.log("clicked");
+    console.log("clicked add marker");
     var cursorArea = document.getElementById('map');
     cursorArea.style.cursor = 'crosshair';
+ });
+}
+
+// Create select button
+function SelectControl(controlDiv, map) {
+ // Set CSS for the control border.
+ var controlUI = document.createElement('div');
+ controlUI.style.backgroundColor = '#fff';
+ controlUI.style.border = '2px solid #fff';
+ controlUI.style.borderRadius = '3px';
+ controlUI.style.marginTop = '10px';
+ controlUI.style.marginLeft = '10px';
+ controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+ controlUI.style.cursor = 'pointer';
+ controlUI.style.textAlign = 'center';
+ controlUI.title = 'Click to select item';
+ controlDiv.appendChild(controlUI);
+
+ // Set CSS for the control interior.
+ var controlIcon = document.createElement('div');
+ controlIcon.style.backgroundImage = "url('images/" + "rsz_hand_cursor.png')";   
+ controlIcon.style.height = '36px';
+ controlIcon.style.width = '36px';
+ controlUI.appendChild(controlIcon);
+    
+ // Setup the click event listeners: let user put pin on map
+ controlUI.addEventListener('click', function() {
+    console.log("clicked select");
+    var cursorArea = document.getElementById('map');
+    cursorArea.style.cursor = 'pointer';
  });
 }
 
