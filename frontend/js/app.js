@@ -54,6 +54,7 @@ function initialize() {
     style: google.maps.NavigationControlStyle.ZOOM_PAN
   },
   scaleControl: true,
+  styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}],
   mapTypeId: google.maps.MapTypeId.ROADMAP
  };
  // Insert map to the page
@@ -79,7 +80,10 @@ function initialize() {
      
     
  // Add event action when user click on map    
- //google.maps.event.addListener(map, 'click', placeMarker);
+ google.maps.event.addListener(map, 'click', function(){
+     console.log('not going to open infoWindow');
+     infoWindow.close();
+ });
 
  // Try W3C Geolocation (Preferred)
  if (navigator.geolocation) {
@@ -92,7 +96,7 @@ function initialize() {
             icon: geoImg,
             shape: shape
         });
-   map.setZoom(17);      
+   map.setZoom(15);      
    map.setCenter(initialLocation);
   }, function() {
    handleNoGeolocation(browserSupportFlag);
@@ -216,6 +220,13 @@ function PinControl(controlDiv, map) {
  controlIcon.style.height = '36px';
  controlIcon.style.width = '36px';
  controlUI.appendChild(controlIcon);
+    
+ // Setup the click event listeners: let user put pin on map
+ controlUI.addEventListener('click', function() {
+    console.log("clicked");
+    var cursorArea = document.getElementById('map');
+    cursorArea.style.cursor = 'crosshair';
+ });
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
