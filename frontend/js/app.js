@@ -182,8 +182,8 @@ function CenterControl(controlDiv, map) {
 
  // Set CSS for the control border.
  var controlUI = document.createElement('div');
- controlUI.style.backgroundColor = '#fff';
- controlUI.style.border = '2px solid #fff';
+ controlUI.style.backgroundColor = 'transparent';
+ controlUI.style.border = '2px solid transparent';
  controlUI.style.borderRadius = '3px';
  controlUI.style.marginTop = '10px';
  controlUI.style.marginRight = '10px';
@@ -211,8 +211,8 @@ function CenterControl(controlDiv, map) {
 function PinControl(controlDiv, map) {
  // Set CSS for the control border.
  var controlUI = document.createElement('div');
- controlUI.style.backgroundColor = '#fff';
- controlUI.style.border = '2px solid #fff';
+ controlUI.style.backgroundColor = 'transparent';
+ controlUI.style.border = '2px solid transparent';
  controlUI.style.borderRadius = '3px';
  controlUI.style.marginTop = '10px';
  controlUI.style.marginLeft = '10px';
@@ -242,8 +242,8 @@ function PinControl(controlDiv, map) {
 function SelectControl(controlDiv, map) {
  // Set CSS for the control border.
  var controlUI = document.createElement('div');
- controlUI.style.backgroundColor = '#fff';
- controlUI.style.border = '2px solid #fff';
+ controlUI.style.backgroundColor = 'transparent';
+ controlUI.style.border = '2px solid transparent';
  controlUI.style.borderRadius = '3px';
  //controlUI.style.margin ="20px";    
  controlUI.style.marginTop = '10px';
