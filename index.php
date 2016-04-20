@@ -20,12 +20,12 @@ $email1 = mysqli_real_escape_string($connection,$_POST['email1']);
 $email2 = mysqli_real_escape_string($connection,$_POST['email2']);
 $password = mysqli_real_escape_string($connection,$_POST['new-password']);
 $hashValue = md5($email1 + microtime());
-$GLOBALS['globalhash'] = $hashValue;
 $year = $_POST['birth-year'];
 $month = $_POST['birth-month'];
 $day = $_POST['birth-day'];
 $birthday = $year."-".$month."-".$day;
-
+$_SESSION['email1'] = $email1;
+$_SESSION['ha'] = $hashValue;
 //$birthday = year.month.day;
 $gender = $_POST['optradio'];
 //check for if the email already exist in the database

@@ -5,26 +5,29 @@
 
 <?php
    session_start(); 
-   if (!isset($GLOBALS['globalhash'])) {
+   if (!$_SESSION['email1']) {
    	header('Location: index.php');
    }
 ?>
 
 <?php
 
-$email1 = mysqli_real_escape_string($connection,$_POST['email1']);
+$email1 = $_SESSION['email1'];
 //$hash = globalhash;
-echo $globalhash;
+
+echo $_SESSION['email1'];
+echo $_SESSION['ha'];
+//$email = $_SESSION['email1'];
+//$hashValue = $_SESSION['ha'] ;
 // the message
 $msg = "Welcome to Pinstories. Please copy the code below and paste to the to Confirm Email button
-to active your account.\n $globalhash \n";
+to active your account.\n $_SESSION['ha'] \n";
 
 // use wordwrap() if lines are longer than 70 characters
 $msg = wordwrap($msg,70);
 
 // send email
-$mail=mail("wu673@purdue.edu","Email confirmation from Pinstories",$msg, "From: Pinstories.com");
-/*if($mail){
+///*if($mail){
   echo "Thank you for using our mail form";
 }else{
   echo "Mail sending failed."; 
