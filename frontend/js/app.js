@@ -4,15 +4,15 @@ var chicago = new google.maps.LatLng(41.85, -87.65);
 var siberia = new google.maps.LatLng(60, 105);
 var initialLocation;
 var browserSupportFlag = new Boolean();
-var GeoMarker;
+//customize icons of geomarker
 var geoImg = {
-    url: './images/mapme.png',
-    // This marker is 20 pixels wide by 32 pixels high.
-    size: new google.maps.Size(40, 40),
+    url: './images/47112-200.png',
+    size: new google.maps.Size(200, 200),
     // The origin for this image is (0, 0).
     origin: new google.maps.Point(0, 0),
     // The anchor for this image is the base of the flagpole at (0, 32).
-    anchor: new google.maps.Point(0, 32)
+    anchor: new google.maps.Point(0, 32),
+    scaledSize: new google.maps.Size(32, 32)
 };
 
 // Shapes define the clickable region of the icon. The type defines an HTML
@@ -69,6 +69,7 @@ function initialize() {
  
  google.maps.event.addListener(map, 'click', function() {
   infoWindow.close();
+  placeMarker(event.latLng);
  });
 
  // Try W3C Geolocation (Preferred)
@@ -93,17 +94,7 @@ function initialize() {
   browserSupportFlag = false;
   handleNoGeolocation(browserSupportFlag);
  }
- // Handling geo location Err
- function handleNoGeolocation(errorFlag) {
-  if (errorFlag == true) {
-   alert("Geolocation service failed.");
-   initialLocation = chicago;
-  } else {
-   alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
-   initialLocation = siberia;
-  }
-  map.setCenter(initialLocation);
- }// End of geo location
+// End of geo location
     
  //Auto complete search bar    
  var acOptions = {
@@ -134,6 +125,27 @@ function initialize() {
  });
 } //end of function initialize
 
+
+function placeMarker(location) {
+    var marker = new google.maps.Marker({
+        position: location, 
+        map: map
+    });
+}
+
+ // Handling geo location Err
+ function handleNoGeolocation(errorFlag) {
+  if (errorFlag == true) {
+   alert("Geolocation service failed.");
+   initialLocation = chicago;
+  } else {
+   alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+   initialLocation = siberia;
+  }
+  map.setCenter(initialLocation);
+ }
+
+//Add GeoLocation Control on map
 function CenterControl(controlDiv, map) {
 
  // Set CSS for the control border.
@@ -151,7 +163,7 @@ function CenterControl(controlDiv, map) {
 
  // Set CSS for the control interior.
  var controlIcon = document.createElement('div');
- controlIcon.style.backgroundImage = "url('images/" + "mylocation-sprite-cookieless-v2-2x.png')"
+ controlIcon.style.backgroundImage = "url('images/" + "rsz_ic_my_location_black_48dp.png')";   
  controlIcon.style.height = '36px';
  controlIcon.style.width = '36px';
  controlUI.appendChild(controlIcon);
