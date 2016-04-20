@@ -4,6 +4,8 @@ var chicago = new google.maps.LatLng(41.85, -87.65);
 var siberia = new google.maps.LatLng(60, 105);
 var initialLocation;
 var browserSupportFlag = new Boolean();
+var markers = [];
+
 //customize icons of geomarker
 var geoImg = {
     url: './images/47112-200.png',
@@ -58,19 +60,26 @@ function initialize() {
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
  //GeoMarker = new GeolocationMarker(map);
  
- // Create the DIV to hold the control and call the CenterControl()
+ // Create the DIV to hold the center control and call the CenterControl()
  // constructor passing in this DIV.
  var centerControlDiv = document.createElement('div');
  var centerControl = new CenterControl(centerControlDiv, map);
 
  centerControlDiv.index = 1;
- // Append the self locate icon on google map
+ // Append the center control on google map
  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerControlDiv);
  
- google.maps.event.addListener(map, 'click', function() {
-  infoWindow.close();
-  placeMarker(event.latLng);
- });
+ // Create div to hold pinControl
+ var pinControlDiv = document.createElement('div');
+ var pinControl = new PinControl(pinControlDiv, map);
+
+ pinControlDiv.index = 1;
+ // Append the pin control on google map
+ map.controls[google.maps.ControlPosition.LEFT_TOP].push(pinControlDiv);
+     
+    
+ // Add event action when user click on map    
+ //google.maps.event.addListener(map, 'click', placeMarker);
 
  // Try W3C Geolocation (Preferred)
  if (navigator.geolocation) {
@@ -106,6 +115,7 @@ function initialize() {
  var marker = new google.maps.Marker({
   map: map
  });
+ // Event handling when usr typing in search input field    
  google.maps.event.addListener(autocomplete, 'place_changed', function() {
   infoWindow.close();
   var place = autocomplete.getPlace();
@@ -122,16 +132,26 @@ function initialize() {
 
    infoWindow.open(map, marker);
   });
- });
-} //end of function initialize
+ });// End of auto complete
+} // End of function initialize
 
-
-function placeMarker(location) {
-    var marker = new google.maps.Marker({
-        position: location, 
-        map: map
-    });
-}
+// Place marker on map when user click on map
+//function placeMarker(event) {
+//    var marker = new google.maps.Marker({
+//        position: event.latLng, 
+//        map: map,
+//        draggable: true
+//    });
+//    markers.push(marker);
+//    google.maps.event.addListener(marker, 'click', function() {
+//        marker.setMap(null);
+//        for (var i = 0, len = markers.length; i < len && markers[i] != marker; ++i);
+//        markers.splice(i, 1);
+//    });
+//    google.maps.event.addListener(marker, 'dragend', function() {
+// 
+//    });
+//}
 
  // Handling geo location Err
  function handleNoGeolocation(errorFlag) {
@@ -175,5 +195,27 @@ function CenterControl(controlDiv, map) {
 }
 
 
+// Create pin button
+function PinControl(controlDiv, map) {
+ // Set CSS for the control border.
+ var controlUI = document.createElement('div');
+ controlUI.style.backgroundColor = '#fff';
+ controlUI.style.border = '2px solid #fff';
+ controlUI.style.borderRadius = '3px';
+ controlUI.style.marginTop = '10px';
+ controlUI.style.marginLeft = '10px';
+ controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+ controlUI.style.cursor = 'pointer';
+ controlUI.style.textAlign = 'center';
+ controlUI.title = 'Click to add marker';
+ controlDiv.appendChild(controlUI);
+
+ // Set CSS for the control interior.
+ var controlIcon = document.createElement('div');
+ controlIcon.style.backgroundImage = "url('images/" + "rsz_299087.png')";   
+ controlIcon.style.height = '36px';
+ controlIcon.style.width = '36px';
+ controlUI.appendChild(controlIcon);
+}
 
 google.maps.event.addDomListener(window, 'load', initialize);
