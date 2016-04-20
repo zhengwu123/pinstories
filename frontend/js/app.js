@@ -54,6 +54,7 @@ function initialize() {
     style: google.maps.NavigationControlStyle.ZOOM_PAN
   },
   scaleControl: true,
+  draggableCursor: 'pointer',     
   styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}],
   mapTypeId: google.maps.MapTypeId.ROADMAP
  };
@@ -231,8 +232,9 @@ function PinControl(controlDiv, map) {
  // Setup the click event listeners: let user put pin on map
  controlUI.addEventListener('click', function() {
     console.log("clicked add marker");
-    var cursorArea = document.getElementById('map');
-    cursorArea.style.cursor = 'crosshair';
+//    var cursorArea = document.getElementById('map');
+//    cursorArea.style.cursor = 'crosshair';
+     map.set('draggableCursor', 'crosshair');
  });
 }
 
@@ -243,6 +245,7 @@ function SelectControl(controlDiv, map) {
  controlUI.style.backgroundColor = '#fff';
  controlUI.style.border = '2px solid #fff';
  controlUI.style.borderRadius = '3px';
+ //controlUI.style.margin ="20px";    
  controlUI.style.marginTop = '10px';
  controlUI.style.marginLeft = '10px';
  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
@@ -261,8 +264,9 @@ function SelectControl(controlDiv, map) {
  // Setup the click event listeners: let user put pin on map
  controlUI.addEventListener('click', function() {
     console.log("clicked select");
-    var cursorArea = document.getElementById('map');
-    cursorArea.style.cursor = 'pointer';
+//    var cursorArea = $('#map');
+//    cursorArea.style.cursor = 'pointer';
+    map.set('draggableCursor', 'pointer');
  });
 }
 
