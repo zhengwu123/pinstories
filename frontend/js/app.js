@@ -4,7 +4,9 @@ var siberia = new google.maps.LatLng(60, 105);
 var initialLocation;
 var browserSupportFlag = new Boolean();
 var markers = [];
-var infoWindow;
+var infowindow;
+var marker;
+var GPSlocation;
 
 //customize icons of geomarker
 var geoImg = {
@@ -90,10 +92,9 @@ function initialize() {
  map.controls[google.maps.ControlPosition.LEFT_TOP].push(selectControlDiv);
     
 // // Add event action when user click on map    
-// google.maps.event.addListener(map, 'click', function(){
-//     console.log('not going to open infoWindow');
-//     infoWindow.close();
-// });
+ google.maps.event.addListener(map, 'click', function(){
+     infoWindow.close();
+ });
 
  // Try W3C Geolocation (Preferred)
  if (navigator.geolocation) {
@@ -167,16 +168,7 @@ function initialize() {
 //    });
 //}
 
-function placeMarker(location) {
-    var marker = new google.maps.Marker({
-        position: location, 
-        map: map
-    });
-    map.panTo(location);
-    infoWindow.setContent("<div id='info'><p id='title'>" + "data" + "</p></div>");
-    infoWindow.open(map, marker);
-}
-
+ var html = '<button type="button" class="btn btn-success" name="iw-delete-Btn" id="iw-delete-Btn">Delete</button>';
  // Handling geo location Err
  function handleNoGeolocation(errorFlag) {
   if (errorFlag == true) {
@@ -215,6 +207,7 @@ function CenterControl(controlDiv, map) {
  // Setup the click event listeners: simply set the map to user initialLocation.
  controlUI.addEventListener('click', function() {
   map.setCenter(initialLocation);
+  map.setZoom(15);     
  });
 }
 
@@ -247,10 +240,41 @@ function PinControl(controlDiv, map) {
 //    var cursorArea = document.getElementById('map');
 //    cursorArea.style.cursor = 'crosshair';
      map.set('draggableCursor', 'crosshair');
-     google.maps.event.addListener(map, 'click', function(event) {
+     google.maps.event.addListenerOnce(map, 'click', function(event) {
+        //console.log("clicked on map");
         placeMarker(event.latLng);
+        map.set('draggableCursor', 'pointer');
      });
+     var deleteBtn = $('#iw-delete-Btn');
+     if (deleteBtn){
+         console.log("ready to del marker");
+         deleteBtn.addEventListener("click", deleteMarker(marker));
+     } 
  });
+}
+
+function placeMarker(location) {
+    //save loaction here
+    GPSlocation = location;
+    if (!marker){
+        marker = new google.maps.Marker({
+            position: location, 
+            draggable: true,
+            map: map
+        });
+    }
+    else {
+        marker.setPosition(location);
+    }
+    map.panTo(location);
+    infowindow = new google.maps.InfoWindow({
+     content: html
+    });
+    infowindow.open(map, marker);
+}
+
+function deleteMarker(marker){
+    marker.setMap(null);
 }
 
 // Create select button
@@ -282,6 +306,8 @@ function SelectControl(controlDiv, map) {
 //    var cursorArea = $('#map');
 //    cursorArea.style.cursor = 'pointer';
     map.set('draggableCursor', 'pointer');
+    google.maps.event.addListener(map, 'click', function(event) {    
+     });
  });
 }
 
