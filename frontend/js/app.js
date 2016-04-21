@@ -1,10 +1,10 @@
 var map = null;
-var infoWindow;
 var chicago = new google.maps.LatLng(41.85, -87.65);
 var siberia = new google.maps.LatLng(60, 105);
 var initialLocation;
 var browserSupportFlag = new Boolean();
 var markers = [];
+var infoWindow;
 
 //customize icons of geomarker
 var geoImg = {
@@ -57,7 +57,9 @@ function initialize() {
   draggableCursor: 'pointer',     
   styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}],
   mapTypeId: google.maps.MapTypeId.ROADMAP
- };
+ };// End of setting map options
+    
+    
  // Insert map to the page
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
  //GeoMarker = new GeolocationMarker(map);
@@ -87,25 +89,25 @@ function initialize() {
  // Append the select control on google map
  map.controls[google.maps.ControlPosition.LEFT_TOP].push(selectControlDiv);
     
- // Add event action when user click on map    
- google.maps.event.addListener(map, 'click', function(){
-     console.log('not going to open infoWindow');
-     infoWindow.close();
- });
+// // Add event action when user click on map    
+// google.maps.event.addListener(map, 'click', function(){
+//     console.log('not going to open infoWindow');
+//     infoWindow.close();
+// });
 
  // Try W3C Geolocation (Preferred)
  if (navigator.geolocation) {
   browserSupportFlag = true;
   navigator.geolocation.getCurrentPosition(function(position) {
-   initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-   var marker = new google.maps.Marker({
-            map: map,
-            position: initialLocation,
-            icon: geoImg,
-            shape: shape
-        });
-   map.setZoom(15);      
-   map.setCenter(initialLocation);
+       initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);   
+       var marker = new google.maps.Marker({
+                map: map,
+                position: initialLocation,
+                icon: geoImg,
+                shape: shape,
+            });
+       map.setZoom(16);      
+       map.setCenter(initialLocation);    
   }, function() {
    handleNoGeolocation(browserSupportFlag);
   });
@@ -164,6 +166,16 @@ function initialize() {
 // 
 //    });
 //}
+
+function placeMarker(location) {
+    var marker = new google.maps.Marker({
+        position: location, 
+        map: map
+    });
+    map.panTo(location);
+    infoWindow.setContent("<div id='info'><p id='title'>" + "data" + "</p></div>");
+    infoWindow.open(map, marker);
+}
 
  // Handling geo location Err
  function handleNoGeolocation(errorFlag) {
@@ -235,6 +247,9 @@ function PinControl(controlDiv, map) {
 //    var cursorArea = document.getElementById('map');
 //    cursorArea.style.cursor = 'crosshair';
      map.set('draggableCursor', 'crosshair');
+     google.maps.event.addListener(map, 'click', function(event) {
+        placeMarker(event.latLng);
+     });
  });
 }
 
