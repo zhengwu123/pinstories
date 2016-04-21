@@ -5,10 +5,14 @@ var initialLocation;
 var browserSupportFlag = new Boolean();
 var markers = [];
 var GPSlocation;
-//var html = '<button type="button" class="btn btn-success" name="iw-delete-Btn" id="iw-delete-Btn">Delete</button>';
+var storyTitle;
+var storyContent;
+var lanTo;
+var lngTo;
+var pinObj = {};
 
 var html = '<div class="container">' + 
-    '<form action="" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN">PIN</button>'+'</div>' + '</div>' + '</form>' + '</div>';
+    '<form action="mainApp.php" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>'+'<p id="res"></p>'+'</div>' + '</div>' + '</form>' + '</div>';
   
       
       
@@ -43,9 +47,9 @@ function initialize() {
    google.maps.event.trigger(map, 'resize');
   });
  });
+    
  //add attr to map
  var mapOptions = {
-  center: chicago,
   zoom: 13,
   disableDefaultUI: true,
   mapTypeControl: true,
@@ -70,8 +74,31 @@ function initialize() {
     
  // Insert map to the page
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
- //GeoMarker = new GeolocationMarker(map);
- 
+    
+ // Try W3C Geolocation (Preferred)
+ if (navigator.geolocation) {
+  browserSupportFlag = true;
+  navigator.geolocation.getCurrentPosition(function(position) {
+       initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);   
+       var marker = new google.maps.Marker({
+                map: map,
+                position: initialLocation,
+                icon: geoImg,
+                shape: shape,
+            });
+       map.setZoom(13);      
+       map.setCenter(initialLocation);    
+  }, function() {
+   handleNoGeolocation(browserSupportFlag);
+  });
+ }
+ // Browser doesn't support Geolocation
+ else {
+  browserSupportFlag = false;
+  handleNoGeolocation(browserSupportFlag);
+ }
+// End of geo location
+    
  // Create the DIV to hold the CENTER control and call the CenterControl()
  // constructor passing in this DIV.
  var centerControlDiv = document.createElement('div');
@@ -101,30 +128,6 @@ function initialize() {
  google.maps.event.addListener(map, 'click', function(){
      infoWindow.close();
  });
-
- // Try W3C Geolocation (Preferred)
- if (navigator.geolocation) {
-  browserSupportFlag = true;
-  navigator.geolocation.getCurrentPosition(function(position) {
-       initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);   
-       var marker = new google.maps.Marker({
-                map: map,
-                position: initialLocation,
-                icon: geoImg,
-                shape: shape,
-            });
-       map.setZoom(13);      
-       map.setCenter(initialLocation);    
-  }, function() {
-   handleNoGeolocation(browserSupportFlag);
-  });
- }
- // Browser doesn't support Geolocation
- else {
-  browserSupportFlag = false;
-  handleNoGeolocation(browserSupportFlag);
- }
-// End of geo location
     
  //Auto complete search bar    
  var acOptions = {
@@ -154,25 +157,24 @@ function initialize() {
    infoWindow.open(map, marker);
   });
  });// End of auto complete
-} // End of function initialize
+    
+    
+ $('#pin-story').submit(function(evt) {
+      evt.preventDefault();
+      var url = $(this).attr("action");
+      $.ajax({
+                type: "post",
+                data: {"data": JSON.stringify(pinObj)},
+                url: url,
+                success: function(data) {
+                    console.log(data);
+                    $('res').html("success");
+                }
 
-// Place marker on map when user click on map
-//function placeMarker(event) {
-//    var marker = new google.maps.Marker({
-//        position: event.latLng, 
-//        map: map,
-//        draggable: true
-//    });
-//    markers.push(marker);
-//    google.maps.event.addListener(marker, 'click', function() {
-//        marker.setMap(null);
-//        for (var i = 0, len = markers.length; i < len && markers[i] != marker; ++i);
-//        markers.splice(i, 1);
-//    });
-//    google.maps.event.addListener(marker, 'dragend', function() {
-// 
-//    });
-//}
+            });
+
+    }); // end submit    
+} // End of function initialize
 
  // Handling geo location Err
  function handleNoGeolocation(errorFlag) {
@@ -275,15 +277,23 @@ function placeMarker(location) {
     google.maps.event.addListener(map, 'click', function(event) {
          infowindow.close();
      });
-    // Add action to del button
-    document.getElementById('iw-delete-Btn').addEventListener("click", function(){
-        marker.setMap(null);
+    // Add action to pin button
+    document.getElementById('PIN').addEventListener("click", function(){
+        storyTitle = $('#story-title').val();
+        storyContent = $('#story-content').val();
+        lanTo = location.lat();
+        lngTo = location.lng();
+        //check if it's valid data input to send to server
+        if (storyContent.length != 0 && storyTitle.length != 0){
+            //construct the pin object
+            pinObj.storyTitle = storyTitle;
+            pinObj.storyContent = storyContent;
+            pinObj.lanTo = lanTo;
+            pinObj.lngTo = lngTo;
+        }
     });
 }
 
-function deleteMarker(marker){
-    marker.setMap(null);
-}
 
 // Create select button
 function SelectControl(controlDiv, map) {
@@ -313,6 +323,32 @@ function SelectControl(controlDiv, map) {
     map.set('draggableCursor', 'pointer');
     
  });
+}
+
+function ajax_post(){
+    // Create our XMLHttpRequest object
+    var hr = new XMLHttpRequest();
+    // Create some variables we need to send to our PHP file
+    var url = "parse_pin.php";
+    var title = document.getElementById("story-title").value;
+    var content = document.getElementById("story-content").value;
+    var lat = GPSlocation.lat();
+    var long = GPSlocation.lng();
+    var vars = "title="+title+"&content="+content + "&latitude="+lat+"&longitude="+ long;
+    hr.open("POST", url, true);
+    // Set content type header information for sending url encoded variables in the request
+    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // Access the onreadystatechange event for the XMLHttpRequest object
+    hr.onreadystatechange = function() {
+      if(hr.readyState == 4 && hr.status == 200) {
+        var return_data = hr.responseText;
+      window.alert(return_data);
+      
+      }
+    }
+    // Send the data to PHP now... and wait for response to update the status div
+    hr.send(vars); // Actually execute the request
+     
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
