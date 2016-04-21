@@ -5,10 +5,15 @@ var initialLocation;
 var browserSupportFlag = new Boolean();
 var markers = [];
 var GPSlocation;
+var storyTitle;
+var storyContent;
+var lanTo;
+var lngTo;
+var pinObj = {};
 //var html = '<button type="button" class="btn btn-success" name="iw-delete-Btn" id="iw-delete-Btn">Delete</button>';
 
 var html = '<div class="container">' + 
-    '<form action="" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN">PIN</button>'+'</div>' + '</div>' + '</form>' + '</div>';
+    '<form action="mainApp.php" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN">PIN</button>'+'<p id="res"></p>'+'</div>' + '</div>' + '</form>' + '</div>';
   
       
       
@@ -72,6 +77,24 @@ function initialize() {
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
  //GeoMarker = new GeolocationMarker(map);
  
+// //add the drawing tool that allows users to draw points on the map
+//   var drawingManager = new google.maps.drawing.DrawingManager({
+//        drawingMode: google.maps.drawing.OverlayType.MARKER,
+//        drawingControl: true,
+//        drawingControlOptions: {
+//            position: google.maps.ControlPosition.TOP_CENTER,
+//            drawingModes: [google.maps.drawing.OverlayType.MARKER]
+//        },
+//        markerOptions: {
+//            // icon: new google.maps.MarkerImage('bus.png'),
+//            draggable: true
+//        }
+//    });
+// 
+//    //add the tools to the map
+//    drawingManager.setMap(map);    
+    
+    
  // Create the DIV to hold the CENTER control and call the CenterControl()
  // constructor passing in this DIV.
  var centerControlDiv = document.createElement('div');
@@ -154,6 +177,26 @@ function initialize() {
    infoWindow.open(map, marker);
   });
  });// End of auto complete
+    
+    
+ $('#pin-story').submit(function(evt) {
+      evt.preventDefault();
+      var url = $(this).attr("action");
+//      //supports the ability to send more data meant to be stored in a database
+//      $.post(url, formData, function(response) {
+//          $('#signup').html("<p>Thanks for signing up!</p>");
+//      }); // end post
+     $.ajax({
+                type: "post",
+                data: {"data": JSON.stringify(pinObj)},
+                url: url,
+                success: function(data) {
+                    $('res').html(data);
+                }
+
+            });
+
+    }); // end submit    
 } // End of function initialize
 
 // Place marker on map when user click on map
@@ -275,15 +318,23 @@ function placeMarker(location) {
     google.maps.event.addListener(map, 'click', function(event) {
          infowindow.close();
      });
-    // Add action to del button
-    document.getElementById('iw-delete-Btn').addEventListener("click", function(){
-        marker.setMap(null);
+    // Add action to pin button
+    document.getElementById('PIN').addEventListener("click", function(){
+        storyTitle = $('#story-title').val();
+        storyContent = $('#story-content').val();
+        lanTo = location.lat();
+        lngTo = location.lng();
+        //check if it's valid data input to send to server
+        if (storyContent.length != 0 && storyTitle.length != 0){
+            //construct the pin object
+            pinObj.storyTitle = storyTitle;
+            pinObj.storyContent = storyContent;
+            pinObj.lanTo = lanTo;
+            pinObj.lngTo = lngTo;
+        }
     });
 }
 
-function deleteMarker(marker){
-    marker.setMap(null);
-}
 
 // Create select button
 function SelectControl(controlDiv, map) {

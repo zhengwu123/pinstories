@@ -1,7 +1,15 @@
 <?php
    session_start();
    if (!$_SESSION['valid'])
-header("Location: index.php");
+    header("Location: index.php");
+?>
+<?php
+    if (isset($_POST["points"])) {
+        // Decode our JSON into PHP objects we can use
+        $points = json_decode($_POST["data"]);
+        // Access our object's data and array values.
+        echo "storytitle is : " . $data->storyTitle . "<br>";
+    }
 ?>
 
 <!DOCTYPE html>
