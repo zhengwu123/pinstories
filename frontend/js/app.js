@@ -5,6 +5,14 @@ var initialLocation;
 var browserSupportFlag = new Boolean();
 var markers = [];
 var GPSlocation;
+//var html = '<button type="button" class="btn btn-success" name="iw-delete-Btn" id="iw-delete-Btn">Delete</button>';
+
+var html = '<div class="container">' + 
+    '<form action="" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN">PIN</button>'+'</div>' + '</div>' + '</form>' + '</div>';
+  
+      
+      
+        
 
 //customize icons of geomarker
 var geoImg = {
@@ -166,7 +174,6 @@ function initialize() {
 //    });
 //}
 
- var html = '<button type="button" class="btn btn-success" name="iw-delete-Btn" id="iw-delete-Btn">Delete</button>';
  // Handling geo location Err
  function handleNoGeolocation(errorFlag) {
   if (errorFlag == true) {
