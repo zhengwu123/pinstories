@@ -4,8 +4,6 @@ var siberia = new google.maps.LatLng(60, 105);
 var initialLocation;
 var browserSupportFlag = new Boolean();
 var markers = [];
-var infowindow;
-var marker;
 var GPSlocation;
 
 //customize icons of geomarker
@@ -107,7 +105,7 @@ function initialize() {
                 icon: geoImg,
                 shape: shape,
             });
-       map.setZoom(16);      
+       map.setZoom(13);      
        map.setCenter(initialLocation);    
   }, function() {
    handleNoGeolocation(browserSupportFlag);
@@ -209,7 +207,7 @@ function CenterControl(controlDiv, map) {
   map.setCenter(initialLocation);
   map.setZoom(15);     
  });
-}
+}// End of Geo Control
 
 
 // Create pin button
@@ -241,36 +239,39 @@ function PinControl(controlDiv, map) {
 //    cursorArea.style.cursor = 'crosshair';
      map.set('draggableCursor', 'crosshair');
      google.maps.event.addListenerOnce(map, 'click', function(event) {
-        //console.log("clicked on map");
         placeMarker(event.latLng);
         map.set('draggableCursor', 'pointer');
      });
-     var deleteBtn = $('#iw-delete-Btn');
-     if (deleteBtn){
-         console.log("ready to del marker");
-         deleteBtn.addEventListener("click", deleteMarker(marker));
-     } 
  });
-}
+} // End of Pin Control
 
 function placeMarker(location) {
     //save loaction here
     GPSlocation = location;
-    if (!marker){
-        marker = new google.maps.Marker({
+    var marker = new google.maps.Marker({
             position: location, 
+            //later might only enable owner of pin to drag 
             draggable: true,
             map: map
         });
-    }
-    else {
-        marker.setPosition(location);
-    }
     map.panTo(location);
-    infowindow = new google.maps.InfoWindow({
+
+    var infowindow = new google.maps.InfoWindow({
      content: html
     });
     infowindow.open(map, marker);
+    // Add action to marker
+    google.maps.event.addListener(marker, 'click', function(event) {
+         infowindow.open(map, marker);
+     });
+    // Close infoWindows when user click on map
+    google.maps.event.addListener(map, 'click', function(event) {
+         infowindow.close();
+     });
+    // Add action to del button
+    document.getElementById('iw-delete-Btn').addEventListener("click", function(){
+        marker.setMap(null);
+    });
 }
 
 function deleteMarker(marker){
@@ -283,8 +284,7 @@ function SelectControl(controlDiv, map) {
  var controlUI = document.createElement('div');
  controlUI.style.backgroundColor = 'transparent';
  controlUI.style.border = '2px solid transparent';
- controlUI.style.borderRadius = '3px';
- //controlUI.style.margin ="20px";    
+ controlUI.style.borderRadius = '3px';   
  controlUI.style.marginTop = '10px';
  controlUI.style.marginLeft = '10px';
  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
@@ -303,11 +303,8 @@ function SelectControl(controlDiv, map) {
  // Setup the click event listeners: let user put pin on map
  controlUI.addEventListener('click', function() {
     console.log("clicked select");
-//    var cursorArea = $('#map');
-//    cursorArea.style.cursor = 'pointer';
     map.set('draggableCursor', 'pointer');
-    google.maps.event.addListener(map, 'click', function(event) {    
-     });
+    
  });
 }
 
