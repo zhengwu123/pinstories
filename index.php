@@ -84,7 +84,7 @@ echo '</script>';
                && !empty($_POST['login-password'])) {
               $email = mysqli_real_escape_string($connection,$_POST['login-account']);
               $password = mysqli_real_escape_string($connection,$_POST['login-password']);
-                $sql = "SELECT email, password FROM user WHERE email = '".$email."' AND  password = '".$password."'";
+                $sql = "SELECT email, password ,active FROM user WHERE email = '".$email."' AND  password = '".$password."' AND active = 1 ";
                   $retval = mysqli_query($connection,$sql);
                 if(! $retval )
                     {
@@ -203,7 +203,7 @@ echo '</script>';
           <div class="col-md-6">
             <div class="row">
               <h1>Sign Up</h1>
-              <p>Get Some Awesome Stuff Today!</p>
+              <p>Pinstories, a place to share your story with others!</p>
             </div>
             <!-- End of row -->
             <!-- Sign Up Info -->

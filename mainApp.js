@@ -12,8 +12,11 @@ var lngTo;
 var pinObj = {};
 
 var html = '<div class="container">' + 
-    '<form action="" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>'+'<p id="res"></p>'+'</div>' + '</div>' + '</form>' + '</div>';
-       
+    '<form action="mainApp.php" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN" onclick="ajax_post()"">PIN</button>'+'<p id="res"></p>'+'</div>' + '</div>' + '</form>' + '</div>';
+  
+      
+      
+        
 
 //customize icons of geomarker
 var geoImg = {
@@ -72,10 +75,6 @@ function initialize() {
  // Insert map to the page
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
     
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:frontend/js/mainApp.js
->>>>>>> 8258cc2e890c5e9d8451ac3a87ff88c0918a7501
  // Try W3C Geolocation (Preferred)
  if (navigator.geolocation) {
   browserSupportFlag = true;
@@ -100,11 +99,6 @@ function initialize() {
  }
 // End of geo location
     
-<<<<<<< HEAD
-=======
-=======
->>>>>>> f809ff9224204b948150ffb38a71b8689cb0e6cf:frontend/js/mainApp.js
->>>>>>> 8258cc2e890c5e9d8451ac3a87ff88c0918a7501
  // Create the DIV to hold the CENTER control and call the CenterControl()
  // constructor passing in this DIV.
  var centerControlDiv = document.createElement('div');
