@@ -131,6 +131,8 @@ echo '</script>';
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Place favicon.ico in the root directory -->
+
+
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -146,7 +148,7 @@ echo '</script>';
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <!-- Add your site or application content here -->
-    
+
     <!-- front end by MAOXIA -->
     <main>
       <nav class="navbar navbar-inverse navbar-custom">
@@ -164,7 +166,7 @@ echo '</script>';
           <div id="navbar" class="collapse navbar-collapse">
             <!-- Login -->
             <div class="container">
-              <form class="navbar-form navbar-right" action="index.php" method="post">
+              <form class="navbar-form navbar-right" data-toggle="validator" action="index.php" method="post">
                 <div class="form-group">
                   <input type="email" placeholder="Email" class="form-control" name="login-account" id="login-account" required>
                 </div>
@@ -181,6 +183,15 @@ echo '</script>';
         <!-- End of Container -->
       </nav>
       <!-- End of Nav -->
+<!--      Forget password-->
+      <div class="container">
+         <div class="col-md-10">
+
+         </div>
+         <div class="col-md-2" id="forgetpassword">
+              <a href="#" id="fplink">Forget password?</a>
+         </div>
+      </div>
       <!-- Sign Up -->
       <div class="container">
         <div class="row">
@@ -200,12 +211,12 @@ echo '</script>';
               <form action="index.php" data-toggle="validator" role="form" id="signupform" method="post">
                 <div class="fullName form-inline">
                   <div class="form-group has-feedback">
-                    <input type="text" pattern="^[A-z]{1,}$" maxlength="20" class="form-control" id="firstname" name="fname" placeholder="First Name" required>
+                    <input type="text" pattern="^\w+$" maxlength="20" class="form-control" id="firstname" name="fname" placeholder="First Name" required>
                     <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
 <!--                    <div class="help-block with-errors"></div>-->
                   </div>
                   <div class="form-group has-feedback">
-                    <input type="text" pattern="^[A-z]{1,}$" maxlength="20" class="form-control" id="lastname" name="lname" placeholder="Last Name" required>
+                    <input type="text" pattern="^\w+$" maxlength="20" class="form-control" id="lastname" name="lname" placeholder="Last Name" required>
                     <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
 <!--                    <div class="help-block with-errors"></div>-->
                   </div>
@@ -228,9 +239,17 @@ echo '</script>';
                   <!-- End of row -->
                   <div class="row top-buffer">
                     <div class="form-group has-feedback">
-                      <input type="password" data-minlength="6" class="form-control" id="new-password" name="new-password" placeholder="New Password" required>
+                      <input type="password" pattern="(?=.*[\d])(?=.*[a-z])(?=.*[A-Z]).{6,}" class="form-control" id="new-password" name="new-password" placeholder="New Password" required>
                       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-                      <div class="help-block">Minimum of 6 characters</div>
+                      <div class="help-block">At least six characters that are letters, numbers</div>
+                    </div>
+                  </div>
+                  <!-- End of row -->
+                  <div class="row top-buffer">
+                    <div class="form-group has-feedback">
+                      <input type="password" pattern="(?=.*[_\d])(?=.*[a-z])(?=.*[A-Z]).{6,}" class="form-control" id="confirm-password" name="confirm-password" placeholder="Confirm Password" data-match="#new-password" data-match-error="Password doesn't match" required>
+                      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                      <div class="help-block with-errors"></div>
                     </div>
                   </div>
                   <!-- End of row -->
@@ -245,7 +264,7 @@ echo '</script>';
                     <div class="btn-group" data-toggle="buttons">
                       <label>
                       <input type="radio" id="female" name="optradio" value="0" required/> Female
-                      </label> 
+                      </label>
                       <label>
                       <input type="radio" id="male" name="optradio" value="1"  required/> Male
                       </label>
@@ -254,11 +273,11 @@ echo '</script>';
                   <!-- End of row -->
                   <div class="row top-buffer">
                     <hr>
-                    <button type="submit" class="btn btn-success btn-lg" id="submit" name="signUp">Sign Up</button>  
+                    <button type="submit" class="btn btn-success btn-lg" id="signUp" name="signUp">Sign Up</button>
                   </div>
                   <!-- End of row -->
                 </div>
-                <!-- End of vertical inputs --> 
+                <!-- End of vertical inputs -->
               </form>
             </div>
             <!-- End of row -->
@@ -268,9 +287,12 @@ echo '</script>';
         <!-- End of row for img and signup form -->
       </div>
       <!-- End of Sign Up -->
+
       <!-- Footer -->
-      <div class="container text-center" id="copyright">
-        <span>&copy; Copyright @ <?php echo date("Y");?>/span>
+      <div class="container" id="footer">
+       <di class="row top-buffer">
+        <span class="text-center" id="copyright">&copy; Copyright @ 2016</span>
+       </di>
       </div>
     </main>
     <!--<script src="http://code.jquery.com/jquery-2.0.0.min.js"></script>-->
@@ -285,7 +307,7 @@ echo '</script>';
     </script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
     <script src="js/validator.min.js"></script>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>

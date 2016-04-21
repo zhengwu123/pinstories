@@ -47,6 +47,7 @@ function initialize() {
    google.maps.event.trigger(map, 'resize');
   });
  });
+    
  //add attr to map
  var mapOptions = {
   center: chicago,
@@ -74,6 +75,30 @@ function initialize() {
     
  // Insert map to the page
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    
+ // Try W3C Geolocation (Preferred)
+ if (navigator.geolocation) {
+  browserSupportFlag = true;
+  navigator.geolocation.getCurrentPosition(function(position) {
+       initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);   
+       var marker = new google.maps.Marker({
+                map: map,
+                position: initialLocation,
+                icon: geoImg,
+                shape: shape,
+            });
+       map.setZoom(13);      
+       map.setCenter(initialLocation);    
+  }, function() {
+   handleNoGeolocation(browserSupportFlag);
+  });
+ }
+ // Browser doesn't support Geolocation
+ else {
+  browserSupportFlag = false;
+  handleNoGeolocation(browserSupportFlag);
+ }
+// End of geo location
     
  // Create the DIV to hold the CENTER control and call the CenterControl()
  // constructor passing in this DIV.
@@ -104,30 +129,6 @@ function initialize() {
  google.maps.event.addListener(map, 'click', function(){
      infoWindow.close();
  });
-
- // Try W3C Geolocation (Preferred)
- if (navigator.geolocation) {
-  browserSupportFlag = true;
-  navigator.geolocation.getCurrentPosition(function(position) {
-       initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);   
-       var marker = new google.maps.Marker({
-                map: map,
-                position: initialLocation,
-                icon: geoImg,
-                shape: shape,
-            });
-       map.setZoom(13);      
-       map.setCenter(initialLocation);    
-  }, function() {
-   handleNoGeolocation(browserSupportFlag);
-  });
- }
- // Browser doesn't support Geolocation
- else {
-  browserSupportFlag = false;
-  handleNoGeolocation(browserSupportFlag);
- }
-// End of geo location
     
  //Auto complete search bar    
  var acOptions = {
