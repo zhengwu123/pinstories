@@ -12,14 +12,9 @@ var lngTo;
 var pinObj = {};
 
 var html = '<div class="container">' + 
-<<<<<<< HEAD:frontend/js/mainApp.js
-    '<form action="mainApp.php" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>'+'<p id="res"></p>'+'</div>' + '</div>' + '</form>' + '</div>';
-=======
-    '<form action="mainApp.php" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN">PIN</button>'+'<p id="res"></p>'+'</div>' + '</div>' + '</form>' + '</div>';
->>>>>>> f809ff9224204b948150ffb38a71b8689cb0e6cf:frontend/js/mainApp.js
-  
-      
-      
+    '<form action="" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>'+'<p id="res"></p>'+'</div>' + '</div>' + '</form>' + '</div>';
+
+     
         
 
 //customize icons of geomarker
@@ -79,7 +74,6 @@ function initialize() {
  // Insert map to the page
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
     
-<<<<<<< HEAD:frontend/js/mainApp.js
  // Try W3C Geolocation (Preferred)
  if (navigator.geolocation) {
   browserSupportFlag = true;
@@ -103,9 +97,6 @@ function initialize() {
   handleNoGeolocation(browserSupportFlag);
  }
 // End of geo location
-    
-=======
->>>>>>> f809ff9224204b948150ffb38a71b8689cb0e6cf:frontend/js/mainApp.js
  // Create the DIV to hold the CENTER control and call the CenterControl()
  // constructor passing in this DIV.
  var centerControlDiv = document.createElement('div');
@@ -336,7 +327,7 @@ function ajax_post(){
     // Create our XMLHttpRequest object
     var hr = new XMLHttpRequest();
     // Create some variables we need to send to our PHP file
-    var url = "parse_pin.php";
+    var url = "./parse_pin.php";
     var title = document.getElementById("story-title").value;
     var content = document.getElementById("story-content").value;
     var lat = GPSlocation.lat();
