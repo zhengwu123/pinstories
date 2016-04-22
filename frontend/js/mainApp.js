@@ -116,13 +116,13 @@ function initialize() {
  // Append the pin control on google map
  map.controls[google.maps.ControlPosition.LEFT_TOP].push(pinControlDiv);
  
- // Create div to hold SELECT Control
- var selectControlDiv = document.createElement('div');
- var selectControl = new SelectControl(selectControlDiv, map);
-
- selectControlDiv.index = 1;
- // Append the select control on google map
- map.controls[google.maps.ControlPosition.LEFT_TOP].push(selectControlDiv);
+// // Create div to hold SELECT Control
+// var selectControlDiv = document.createElement('div');
+// var selectControl = new SelectControl(selectControlDiv, map);
+//
+// selectControlDiv.index = 1;
+// // Append the select control on google map
+// map.controls[google.maps.ControlPosition.LEFT_TOP].push(selectControlDiv);
     
 // // Add event action when user click on map    
  google.maps.event.addListener(map, 'click', function(){
