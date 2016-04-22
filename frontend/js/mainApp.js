@@ -11,9 +11,13 @@ var lanTo;
 var lngTo;
 var pinObj = {};
 
-var html = '<div class="container">' + 
-    '<form action="" data-toggle="validator" role="form" id="pin-story" method="post">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-content" name="story-content" placeholder="Say something..." required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit Button --><div class="row top-buffer">' + '<button type="submit" class="btn btn-success btn-lg" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>'+'<p id="res"></p>'+'</div>' + '</div>' + '</form>' + '</div>';
-       
+var editMode = '<div class="container iw-box">' + 
+    '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' + '</div>';
+
+var clickMode ='<div class="wrapper iw-box">' + 
+    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">Title</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-content">' + '<p id="saved-story-content">Maecenas at arcu ex. Suspendisse ullamcorper cursus magna, vestibulum posuere sem finibus id. Duis at neque vitae tortor ultrices venenatis vel ut erat. Aenean blandit dolor et laoreet molestie. Aenean vel rhoncus sapien, quis facilisis massa. Donec vulputateros nunc, euismod molestie erat congue eu. Fusce lacinia egestas justo, ullamcorper vehicula lectus convallis ut.</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline iw-buttons">' + '<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>'+'</div>' + '</div>' + '</div>' +'</div>';
+
+
 
 //customize icons of geomarker
 var geoImg = {
@@ -72,10 +76,6 @@ function initialize() {
  // Insert map to the page
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
     
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:frontend/js/mainApp.js
->>>>>>> 8258cc2e890c5e9d8451ac3a87ff88c0918a7501
  // Try W3C Geolocation (Preferred)
  if (navigator.geolocation) {
   browserSupportFlag = true;
@@ -99,12 +99,6 @@ function initialize() {
   handleNoGeolocation(browserSupportFlag);
  }
 // End of geo location
-    
-<<<<<<< HEAD
-=======
-=======
->>>>>>> f809ff9224204b948150ffb38a71b8689cb0e6cf:frontend/js/mainApp.js
->>>>>>> 8258cc2e890c5e9d8451ac3a87ff88c0918a7501
  // Create the DIV to hold the CENTER control and call the CenterControl()
  // constructor passing in this DIV.
  var centerControlDiv = document.createElement('div');
@@ -163,23 +157,6 @@ function initialize() {
    infoWindow.open(map, marker);
   });
  });// End of auto complete
-    
-    
- $('#pin-story').submit(function(evt) {
-      evt.preventDefault();
-      var url = $(this).attr("action");
-      $.ajax({
-                type: "post",
-                data: {"data": JSON.stringify(pinObj)},
-                url: url,
-                success: function(data) {
-                    console.log(data);
-                    $('res').html("success");
-                }
-
-            });
-
-    }); // end submit    
 } // End of function initialize
 
  // Handling geo location Err
@@ -220,7 +197,7 @@ function CenterControl(controlDiv, map) {
  // Setup the click event listeners: simply set the map to user initialLocation.
  controlUI.addEventListener('click', function() {
   map.setCenter(initialLocation);
-  map.setZoom(15);     
+  map.setZoom(13);     
  });
 }// End of Geo Control
 
@@ -272,32 +249,60 @@ function placeMarker(location) {
     map.panTo(location);
 
     var infowindow = new google.maps.InfoWindow({
-     content: html
+     content: editMode,
+     maxWidth: 400
     });
     infowindow.open(map, marker);
     // Add action to marker
     google.maps.event.addListener(marker, 'click', function(event) {
          infowindow.open(map, marker);
      });
+    
+    // Add action to cancel button
+        document.getElementById('cancel').addEventListener("click", function(){
+            infowindow.close();
+            google.maps.event.addListener(marker, 'click', function(event) {
+                infowindow.setContent(clickMode); 
+                infowindow.open(map, marker);
+                 // In CLICK Mode when user click on edit btn
+                document.getElementById('iw-edit-btn').addEventListener("click", function(){
+                    infowindow.setContent(editMode);
+                    document.getElementById('cancel').addEventListener("click", function(){
+                        infowindow.close();
+                    });
+                });
+                // Add action to del button
+                document.getElementById('iw-del-btn').addEventListener("click", function(){
+                        marker.setMap(null);
+                        var lat = GPSlocation.lat();
+                        var long = GPSlocation.lng();
+                        //need to send server side 
+                });    
+            });
+        });
+    
     // Close infoWindows when user click on map
     google.maps.event.addListener(map, 'click', function(event) {
          infowindow.close();
+         google.maps.event.addListener(marker, 'click', function(event) {
+            infowindow.setContent(clickMode); 
+            infowindow.open(map, marker);
+             // In CLICK Mode when user click on edit btn
+            document.getElementById('iw-edit-btn').addEventListener("click", function(){
+                infowindow.setContent(editMode);
+                document.getElementById('cancel').addEventListener("click", function(){
+                    infowindow.close();
+                });
+            });
+             // Add action to del button
+            document.getElementById('iw-del-btn').addEventListener("click", function(){
+                    marker.setMap(null);
+                    var lat = GPSlocation.lat();
+                    var long = GPSlocation.lng();
+                    //need to send server side 
+            });    
+        });
      });
-    // Add action to pin button
-    document.getElementById('PIN').addEventListener("click", function(){
-        storyTitle = $('#story-title').val();
-        storyContent = $('#story-content').val();
-        lanTo = location.lat();
-        lngTo = location.lng();
-        //check if it's valid data input to send to server
-        if (storyContent.length != 0 && storyTitle.length != 0){
-            //construct the pin object
-            pinObj.storyTitle = storyTitle;
-            pinObj.storyContent = storyContent;
-            pinObj.lanTo = lanTo;
-            pinObj.lngTo = lngTo;
-        }
-    });
 }
 
 
@@ -340,6 +345,9 @@ function ajax_post(){
     var content = document.getElementById("story-content").value;
     var lat = GPSlocation.lat();
     var long = GPSlocation.lng();
+    
+    // Need to check user input?
+    
     var vars = "title="+title+"&content="+content + "&latitude="+lat+"&longitude="+ long;
     hr.open("POST", url, true);
     // Set content type header information for sending url encoded variables in the request
@@ -348,13 +356,11 @@ function ajax_post(){
     hr.onreadystatechange = function() {
       if(hr.readyState == 4 && hr.status == 200) {
         var return_data = hr.responseText;
-      window.alert(return_data);
-      
+        window.alert(return_data);
       }
     }
     // Send the data to PHP now... and wait for response to update the status div
-    hr.send(vars); // Actually execute the request
-     
+    hr.send(vars); // Actually execute the request 
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

@@ -143,12 +143,47 @@ button:focus {
     overflow: auto;
 }
 
+.container {
+    height: 300px;
+    width: 350px;
+    max-width: 100%;
+}
 
+div.row.top-buffer {
+    margin: 0 auto;
+    float: none;
+    margin-left: -1.4em;
+}
 
+.iw-buttons {
+    padding-top: 1.5em;
+}
 
+#delBtn {
+    float: right;
+}
 
+#story-content-container {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
 
+#saved-title {
+  font-weight: bold;
+  font-size: 150%;
+}
 
+#saved-content-all {
+  margin-left: 0.5em; 
+}
+
+#iw-edit-btn {
+    margin-right: 0.6em;
+}
+
+.iw-buttons {
+  float: right;
+}
 
 /* ==========================================================================
    Helper classes

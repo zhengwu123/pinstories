@@ -77,7 +77,7 @@ header("Location: index.php");
 	                            <a href="#menu-toggle" class="gradient-menu" id="menu-toggle"></a>
 	                            <input type="text" id="autocomplete" placeholder="">
                             </h3>
-                            <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&libraries=geometry,places,drawing"></script>
+                            <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,places,drawing"></script>
                             <div id="map"></div>
                                
 <!--                            <script src="js/geolocation-marker.js"></script>-->
