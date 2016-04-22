@@ -131,8 +131,8 @@ echo '</script>';
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Place favicon.ico in the root directory -->
-
-
+    <link rel="icon" type="image/png" sizes="32x32" href="images/4.ico/favicon-32x32.png"`>
+    
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -149,7 +149,6 @@ echo '</script>';
     <![endif]-->
     <!-- Add your site or application content here -->
 
-    <!-- front end by MAOXIA -->
     <main>
       <nav class="navbar navbar-inverse navbar-custom">
         <div class="container navbar-top-container">
@@ -203,7 +202,7 @@ echo '</script>';
           <div class="col-md-6">
             <div class="row">
               <h1>Sign Up</h1>
-              <p>Pinstories, a place to share your story with others!</p>
+              <p>Get Some Awesome Stuff Today!</p>
             </div>
             <!-- End of row -->
             <!-- Sign Up Info -->
