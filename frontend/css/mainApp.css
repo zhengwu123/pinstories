@@ -148,6 +148,7 @@ button:focus {
     height: 23em;
     width: 25em;
     max-width: 100%;
+    margin: auto;
 }
 
 div.row.top-buffer {
@@ -157,7 +158,7 @@ div.row.top-buffer {
 }
 
 .iw-buttons {
-    padding-top: 1.5em;
+    padding-top: 0.5em;
 }
 
 #delBtn {
