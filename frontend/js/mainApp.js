@@ -237,6 +237,8 @@ function PinControl(controlDiv, map) {
  });
 } // End of Pin Control
 
+
+//Place Marker
 function placeMarker(location) {
     //save loaction here
     GPSlocation = location;
@@ -253,6 +255,7 @@ function placeMarker(location) {
      maxWidth: 400
     });
     infowindow.open(map, marker);
+    
     // Add action to marker
     google.maps.event.addListener(marker, 'click', function(event) {
          infowindow.open(map, marker);
@@ -280,6 +283,26 @@ function placeMarker(location) {
                 });    
             });
         });
+    
+    // Action after user hit PIN
+    document.getElementById('PIN').addEventListener("click", function(){
+        infowindow.setContent(clickMode);
+        infowindow.open(map, marker);
+         // In CLICK Mode when user click on edit btn
+            document.getElementById('iw-edit-btn').addEventListener("click", function(){
+                infowindow.setContent(editMode);
+                document.getElementById('cancel').addEventListener("click", function(){
+                    infowindow.close();
+                });
+            });
+             // Add action to del button
+            document.getElementById('iw-del-btn').addEventListener("click", function(){
+                    marker.setMap(null);
+                    var lat = GPSlocation.lat();
+                    var long = GPSlocation.lng();
+                    //need to send server side 
+            });  
+    });
     
     // Close infoWindows when user click on map
     google.maps.event.addListener(map, 'click', function(event) {
