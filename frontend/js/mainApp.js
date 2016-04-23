@@ -5,16 +5,11 @@ var initialLocation;
 var browserSupportFlag = new Boolean();
 var markers = [];
 var GPSlocation;
-var storyTitle;
-var storyContent;
-var lanTo;
-var lngTo;
-var pinObj = {};
 
 var editMode = '<div class="container iw-box">' + 
     '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' + '</div>';
 
-var clickMode ='<div class="wrapper iw-box">' + 
+var checkMode ='<div class="wrapper iw-box">' + 
     '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">Title</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-content">' + '<p id="saved-story-content">Maecenas at arcu ex. Suspendisse ullamcorper cursus magna, vestibulum posuere sem finibus id. Duis at neque vitae tortor ultrices venenatis vel ut erat. Aenean blandit dolor et laoreet molestie. Aenean vel rhoncus sapien, quis facilisis massa. Donec vulputateros nunc, euismod molestie erat congue eu. Fusce lacinia egestas justo, ullamcorper vehicula lectus convallis ut.</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline iw-buttons">' + '<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>'+'</div>' + '</div>' + '</div>' +'</div>';
 
 
@@ -38,7 +33,7 @@ var shape = {
     type: 'poly'
 };
 
-function initialize() {
+function initialize() {  
  var myWrapper = $("#wrapper");
  $("#menu-toggle").click(function(e) {
   e.preventDefault();
@@ -262,70 +257,62 @@ function placeMarker(location) {
      });
     
     // Add action to cancel button
-        document.getElementById('cancel').addEventListener("click", function(){
-            infowindow.close();
-            google.maps.event.addListener(marker, 'click', function(event) {
-                infowindow.setContent(clickMode); 
-                infowindow.open(map, marker);
-                 // In CLICK Mode when user click on edit btn
-                document.getElementById('iw-edit-btn').addEventListener("click", function(){
-                    infowindow.setContent(editMode);
-                    document.getElementById('cancel').addEventListener("click", function(){
-                        infowindow.close();
-                    });
-                });
-                // Add action to del button
-                document.getElementById('iw-del-btn').addEventListener("click", function(){
-                        marker.setMap(null);
-                        var lat = GPSlocation.lat();
-                        var long = GPSlocation.lng();
-                        //need to send server side 
-                });    
-            });
-        });
+    document.getElementById('cancel').addEventListener("click", function(){
+        //console.log("called from cancel");
+        toCheckMode(infowindow, marker);
+    });
     
     // Action after user hit PIN
     document.getElementById('PIN').addEventListener("click", function(){
-        infowindow.setContent(clickMode);
-        infowindow.open(map, marker);
-         // In CLICK Mode when user click on edit btn
-            document.getElementById('iw-edit-btn').addEventListener("click", function(){
-                infowindow.setContent(editMode);
-                document.getElementById('cancel').addEventListener("click", function(){
-                    infowindow.close();
-                });
-            });
-             // Add action to del button
-            document.getElementById('iw-del-btn').addEventListener("click", function(){
-                    marker.setMap(null);
-                    var lat = GPSlocation.lat();
-                    var long = GPSlocation.lng();
-                    //need to send server side 
-            });  
+        //console.log("called from PIN");
+        toCheckMode(infowindow, marker);
     });
     
     // Close infoWindows when user click on map
     google.maps.event.addListener(map, 'click', function(event) {
          infowindow.close();
+         //console.log("called from map");
          google.maps.event.addListener(marker, 'click', function(event) {
-            infowindow.setContent(clickMode); 
-            infowindow.open(map, marker);
-             // In CLICK Mode when user click on edit btn
-            document.getElementById('iw-edit-btn').addEventListener("click", function(){
-                infowindow.setContent(editMode);
-                document.getElementById('cancel').addEventListener("click", function(){
-                    infowindow.close();
-                });
-            });
-             // Add action to del button
-            document.getElementById('iw-del-btn').addEventListener("click", function(){
+            toCheckMode(infowindow, marker);
+        });
+     });
+}
+
+function toCheckMode(infowindow, marker){
+    //console.log("in toCheckMode");
+    infowindow.setContent(checkMode);
+    if (document.getElementById('iw-edit-btn') != null){
+        document.getElementById('iw-edit-btn').addEventListener("click", function(){
+            //console.log("called from checkMode");
+            toEditMode(infowindow, marker);
+        });
+    }
+    if (document.getElementById('iw-del-btn') != null){
+        document.getElementById('iw-del-btn').addEventListener("click", function(){
                     marker.setMap(null);
                     var lat = GPSlocation.lat();
                     var long = GPSlocation.lng();
-                    //need to send server side 
-            });    
+                    //console.log("del the marker");
+                    //need to send server side   
+        });     
+    }  
+}
+
+function toEditMode(infowindow, marker){
+    //console.log("in toEditMode");
+    infowindow.setContent(editMode);
+    if (document.getElementById('cancel')){
+        document.getElementById('cancel').addEventListener("click", function(){
+            console.log("called from EditMode, edit");
+            toCheckMode(infowindow, marker);
         });
-     });
+    }
+    if (document.getElementById('PIN')){
+        document.getElementById('PIN').addEventListener("click", function(){
+            //console.log("called from EditMode, PIN");
+            toCheckMode(infowindow, marker);
+        });
+    }
 }
 
 
