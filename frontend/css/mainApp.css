@@ -129,6 +129,7 @@ div.col-lg-12.map-place {
     border-left: none;
     border-right: none;
     width: 70%;
+    border-radius: 0;
 }
 
 input:focus,
@@ -144,8 +145,8 @@ button:focus {
 }
 
 .container {
-    height: 300px;
-    width: 350px;
+    height: 23em;
+    width: 25em;
     max-width: 100%;
 }
 
