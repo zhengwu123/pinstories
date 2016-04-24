@@ -151,10 +151,11 @@ function initialize() {
   });
  });// End of auto complete
     
-    
+ //load markers from database    
  downloadUrl("../mainPagePin.php", function(data) {
   var xml = data.responseXML;
   var markers = xml.documentElement.getElementsByTagName("marker");
+  console.log(markers.length);
   for (var i = 0; i < markers.length; i++) {
     var title = markers[i].getAttribute("title");
     var content = markers[i].getAttribute("content");
@@ -169,9 +170,6 @@ function initialize() {
       position: point,
     });
     bindInfoWindow(marker, map, infoWindow, html);
-    document.getElementById('iw-edit-btn').addEventListener("click", function(){
-        toEditMode();
-    });
   }
  });
 } // End of function initialize
@@ -420,6 +418,15 @@ function bindInfoWindow(marker, map, infoWindow, html) {
   google.maps.event.addListener(marker, 'click', function() {
     infoWindow.setContent(html);
     infoWindow.open(map, marker);
+    document.getElementById('iw-edit-btn').addEventListener("click", function(){
+        toEditMode(infoWindow, marker);
+    });
+    document.getElementById('iw-del-btn').addEventListener("click", function(){
+         marker.setMap(null);
+         var lat = GPSlocation.lat();
+         var long = GPSlocation.lng();
+         //need to send server side              
+     });         
   });
 }
 
