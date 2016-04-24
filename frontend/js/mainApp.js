@@ -4,6 +4,7 @@ var siberia = new google.maps.LatLng(60, 105);
 var initialLocation;
 var browserSupportFlag = new Boolean();
 var GPSlocation;
+var pinModeListener;
 
 var editMode = '<div class="container iw-box">' + 
     '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' + '</div>';
@@ -100,7 +101,8 @@ function initialize() {
  centerControlDiv.index = 1;
  // Append the center control on google map
  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerControlDiv);
- 
+    
+    
  // Create div to hold PIN Control
  var pinControlDiv = document.createElement('div');
  var pinControl = new PinControl(pinControlDiv, map);
@@ -109,13 +111,13 @@ function initialize() {
  // Append the pin control on google map
  map.controls[google.maps.ControlPosition.LEFT_TOP].push(pinControlDiv);
  
-// // Create div to hold SELECT Control
-// var selectControlDiv = document.createElement('div');
-// var selectControl = new SelectControl(selectControlDiv, map);
-//
-// selectControlDiv.index = 1;
-// // Append the select control on google map
-// map.controls[google.maps.ControlPosition.LEFT_TOP].push(selectControlDiv);
+// Create div to hold SELECT Control
+ var selectControlDiv = document.createElement('div');
+ var selectControl = new SelectControl(selectControlDiv, map);
+
+ selectControlDiv.index = 1;
+ // Append the select control on google map
+ map.controls[google.maps.ControlPosition.LEFT_TOP].push(selectControlDiv);     
     
 // // Add event action when user click on map    
  google.maps.event.addListener(map, 'click', function(){
@@ -218,6 +220,39 @@ function CenterControl(controlDiv, map) {
 }// End of Geo Control
 
 
+// Create select button
+function SelectControl(controlDiv, map) {
+ // Set CSS for the control border.
+ var controlUI = document.createElement('div');
+ controlUI.style.backgroundColor = 'transparent';
+ controlUI.style.border = '2px solid transparent';
+ controlUI.style.borderRadius = '3px';   
+ controlUI.style.marginTop = '10px';
+ controlUI.style.marginLeft = '10px';
+ controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+ controlUI.style.cursor = 'pointer';
+ controlUI.style.textAlign = 'center';
+ controlUI.title = 'Click to select item';
+ controlDiv.appendChild(controlUI);
+
+ // Set CSS for the control interior.
+ var controlIcon = document.createElement('div');
+ controlIcon.style.backgroundImage = "url('images/" + "rsz_hand_cursor.png')";   
+ controlIcon.style.height = '36px';
+ controlIcon.style.width = '36px';
+ controlUI.appendChild(controlIcon);
+
+ // Setup the click event listeners: let user put pin on map
+ controlUI.addEventListener('click', function() {
+    console.log("clicked select");
+    map.set('draggableCursor', 'pointer');
+    //disable the pin control
+     console.log("disable the pinned mode after hitting select");
+    google.maps.event.removeListener(pinModeListener);
+ });
+}
+
+
 // Create pin button
 function PinControl(controlDiv, map) {
  // Set CSS for the control border.
@@ -239,14 +274,12 @@ function PinControl(controlDiv, map) {
  controlIcon.style.height = '36px';
  controlIcon.style.width = '36px';
  controlUI.appendChild(controlIcon);
-    
+
  // Setup the click event listeners: let user put pin on map
  controlUI.addEventListener('click', function() {
     console.log("clicked add marker");
-//    var cursorArea = document.getElementById('map');
-//    cursorArea.style.cursor = 'crosshair';
      map.set('draggableCursor', 'crosshair');
-     google.maps.event.addListenerOnce(map, 'click', function(event) {
+     pinModeListener = google.maps.event.addListenerOnce(map, 'click', function(event) {
         placeMarker(event.latLng);
         map.set('draggableCursor', 'pointer');
      });
@@ -354,37 +387,6 @@ function saveCreateTime(){
     return time;		
 }
 
-
-// Create select button
-function SelectControl(controlDiv, map) {
- // Set CSS for the control border.
- var controlUI = document.createElement('div');
- controlUI.style.backgroundColor = 'transparent';
- controlUI.style.border = '2px solid transparent';
- controlUI.style.borderRadius = '3px';   
- controlUI.style.marginTop = '10px';
- controlUI.style.marginLeft = '10px';
- controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
- controlUI.style.cursor = 'pointer';
- controlUI.style.textAlign = 'center';
- controlUI.title = 'Click to select item';
- controlDiv.appendChild(controlUI);
-
- // Set CSS for the control interior.
- var controlIcon = document.createElement('div');
- controlIcon.style.backgroundImage = "url('images/" + "rsz_hand_cursor.png')";   
- controlIcon.style.height = '36px';
- controlIcon.style.width = '36px';
- controlUI.appendChild(controlIcon);
-    
- // Setup the click event listeners: let user put pin on map
- controlUI.addEventListener('click', function() {
-    console.log("clicked select");
-    map.set('draggableCursor', 'pointer');
-    
- });
-}
-
 function ajax_post(){
     // Create our XMLHttpRequest object
     var hr = new XMLHttpRequest();
@@ -425,7 +427,7 @@ function bindInfoWindow(marker, map, infoWindow, html) {
          marker.setMap(null);
          var lat = GPSlocation.lat();
          var long = GPSlocation.lng();
-         //need to send server side              
+         //need to send server side
      });         
   });
 }
