@@ -5,6 +5,7 @@ var initialLocation;
 var browserSupportFlag = new Boolean();
 var GPSlocation;
 var pinModeListener;
+var editSavedStory = 0;
 
 var editMode = '<div class="container iw-box">' + 
     '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' + '</div>';
@@ -171,7 +172,9 @@ function initialize() {
       map: map,
       position: point,
     });
-    bindInfoWindow(marker, map, infoWindow, html);
+    var savedTitle = title;
+    var savedContent = content;
+    bindInfoWindow(marker, map, infoWindow, html, savedTitle, savedContent);
   }
  });
 } // End of function initialize
@@ -321,6 +324,9 @@ function placeMarker(location) {
         //console.log("called from PIN");
         // save time when user push the marker to server		       
         var time = saveCreateTime();
+        // Need to push the time to database
+        //...
+        
         toCheckMode(infowindow, marker, time);
         
     });
@@ -335,9 +341,11 @@ function placeMarker(location) {
      });
 }
 
-function toCheckMode(infowindow, marker){
+function toCheckMode(infowindow, marker, time){
     //console.log("in toCheckMode");
     infowindow.setContent(checkMode);
+    //update time stamp here
+    document.getElementById('CREATE-time').innerHTML = time;
     if (document.getElementById('iw-edit-btn') != null){
         document.getElementById('iw-edit-btn').addEventListener("click", function(){
             //console.log("called from checkMode");
@@ -355,9 +363,18 @@ function toCheckMode(infowindow, marker){
     }  
 }
 
-function toEditMode(infowindow, marker){
+function toEditMode(infowindow, marker, title, content){
     //console.log("in toEditMode");
-    infowindow.setContent(editMode);
+    if (editSavedStory == 0){
+        infowindow.setContent(editMode);
+    }
+    else {
+        //editsavedStory = 1
+        infowindow.setContent(editMode);
+        document.getElementById('story-title').value = title;
+        document.getElementById('story-content').value = content;
+        editSavedStory = 0;
+    }
     if (document.getElementById('cancel')){
         document.getElementById('cancel').addEventListener("click", function(){
             //console.log("called from EditMode, edit");
@@ -416,12 +433,13 @@ function ajax_post(){
     hr.send(vars);
 }
 
-function bindInfoWindow(marker, map, infoWindow, html) {
+function bindInfoWindow(marker, map, infoWindow, html, title, content) {
   google.maps.event.addListener(marker, 'click', function() {
     infoWindow.setContent(html);
     infoWindow.open(map, marker);
     document.getElementById('iw-edit-btn').addEventListener("click", function(){
-        toEditMode(infoWindow, marker);
+        editSavedStory = 1;
+        toEditMode(infoWindow, marker, title, content);
     });
     document.getElementById('iw-del-btn').addEventListener("click", function(){
          marker.setMap(null);
