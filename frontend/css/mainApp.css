@@ -132,6 +132,7 @@ div.col-lg-12.map-place {
     border-radius: 0;
 }
 
+
 input:focus,
 select:focus,
 textarea:focus,
@@ -143,6 +144,8 @@ button:focus {
     margin: 0;
     overflow: auto;
 }
+
+/* IW layout */
 
 .container {
     height: 23em;
@@ -157,13 +160,15 @@ div.row.top-buffer {
     margin-left: -1.4em;
 }
 
-.iw-buttons {
-    padding-top: 0.5em;
+#PIN {
+    margin-right: 0.6em;
 }
 
-#delBtn {
+.iw-buttons {
+    padding-top: 0.5em;
     float: right;
 }
+
 
 #story-content-container {
   padding-top: 2em;
@@ -183,10 +188,21 @@ div.row.top-buffer {
     margin-right: 0.6em;
 }
 
-.iw-buttons {
-  float: right;
+#bottom-row-layout {
+ /*  border: dotted 3px blue; */
+  position: relative;
+  height: 3.2em;
 }
 
+#time-stamp {
+   position: absolute;
+   /* border: solid 3px grey; */
+   display: inline;
+   top: 0.9em;
+}
+
+
+/* Profile img icon layout*/
 .profile {
   position: relative;
 }
@@ -224,6 +240,7 @@ div.row.top-buffer {
     margin: auto;
     margin-top: 0.5em;
 }
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */

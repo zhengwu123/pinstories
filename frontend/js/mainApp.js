@@ -3,15 +3,13 @@ var chicago = new google.maps.LatLng(41.85, -87.65);
 var siberia = new google.maps.LatLng(60, 105);
 var initialLocation;
 var browserSupportFlag = new Boolean();
-var markers = [];
 var GPSlocation;
 
 var editMode = '<div class="container iw-box">' + 
     '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' + '</div>';
 
 var checkMode ='<div class="wrapper iw-box">' + 
-    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">Title</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-content">' + '<p id="saved-story-content">Maecenas at arcu ex. Suspendisse ullamcorper cursus magna, vestibulum posuere sem finibus id. Duis at neque vitae tortor ultrices venenatis vel ut erat. Aenean blandit dolor et laoreet molestie. Aenean vel rhoncus sapien, quis facilisis massa. Donec vulputateros nunc, euismod molestie erat congue eu. Fusce lacinia egestas justo, ullamcorper vehicula lectus convallis ut.</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline iw-buttons">' + '<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>'+'</div>' + '</div>' + '</div>' +'</div>';
-
+    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">Title</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-content">' + '<p id="saved-story-content">Maecenas at arcu ex. Suspendisse ullamcorper cursus magna, vestibulum posuere sem finibus id. Duis at neque vitae tortor ultrices venenatis vel ut erat. Aenean blandit dolor et laoreet molestie. Aenean vel rhoncus sapien, quis facilisis massa. Donec vulputateros nunc, euismod molestie erat congue eu. Fusce lacinia egestas justo, ullamcorper vehicula lectus convallis ut.</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
 
 
 //customize icons of geomarker
@@ -152,7 +150,32 @@ function initialize() {
    infoWindow.open(map, marker);
   });
  });// End of auto complete
+    
+    
+ downloadUrl("../mainPagePin.php", function(data) {
+  var xml = data.responseXML;
+  var markers = xml.documentElement.getElementsByTagName("marker");
+  for (var i = 0; i < markers.length; i++) {
+    var title = markers[i].getAttribute("title");
+    var content = markers[i].getAttribute("content");
+    var email = markers[i].getAttribute("email");
+    var point = new google.maps.LatLng(
+        parseFloat(markers[i].getAttribute("lat")),
+        parseFloat(markers[i].getAttribute("lng")));
+    var html = '<div class="wrapper iw-box">' + 
+    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-content">' + '<p id="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
+    var marker = new google.maps.Marker({
+      map: map,
+      position: point,
+    });
+    bindInfoWindow(marker, map, infoWindow, html);
+    document.getElementById('iw-edit-btn').addEventListener("click", function(){
+        toEditMode();
+    });
+  }
+ });
 } // End of function initialize
+
 
  // Handling geo location Err
  function handleNoGeolocation(errorFlag) {
@@ -250,7 +273,7 @@ function placeMarker(location) {
      maxWidth: 400
     });
     infowindow.open(map, marker);
-    
+    var time;
     // Add action to marker
     google.maps.event.addListener(marker, 'click', function(event) {
          infowindow.open(map, marker);
@@ -265,7 +288,10 @@ function placeMarker(location) {
     // Action after user hit PIN
     document.getElementById('PIN').addEventListener("click", function(){
         //console.log("called from PIN");
-        toCheckMode(infowindow, marker);
+        // save time when user push the marker to server		       
+        var time = saveCreateTime();
+        toCheckMode(infowindow, marker, time);
+        
     });
     
     // Close infoWindows when user click on map
@@ -273,7 +299,7 @@ function placeMarker(location) {
          infowindow.close();
          //console.log("called from map");
          google.maps.event.addListener(marker, 'click', function(event) {
-            toCheckMode(infowindow, marker);
+            toCheckMode(infowindow, marker, time);
         });
      });
 }
@@ -303,7 +329,7 @@ function toEditMode(infowindow, marker){
     infowindow.setContent(editMode);
     if (document.getElementById('cancel')){
         document.getElementById('cancel').addEventListener("click", function(){
-            console.log("called from EditMode, edit");
+            //console.log("called from EditMode, edit");
             toCheckMode(infowindow, marker);
         });
     }
@@ -313,6 +339,21 @@ function toEditMode(infowindow, marker){
             toCheckMode(infowindow, marker);
         });
     }
+}
+
+
+function saveCreateTime(){		
+    // Return today's date and time		
+    var currentTime = new Date();		
+    // returns the month (from 0 to 11)		
+    var month = currentTime.getMonth() + 1;		
+    var day = currentTime.getDate();		
+    var year = currentTime.getFullYear();		
+    var hour= currentTime.getHours();		
+    var min = currentTime.getMinutes();		
+    var sec = currentTime.getSeconds();		
+    var time = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;		
+    return time;		
 }
 
 
@@ -364,13 +405,40 @@ function ajax_post(){
     hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     // Access the onreadystatechange event for the XMLHttpRequest object
     hr.onreadystatechange = function() {
-      if(hr.readyState == 4 && hr.status == 200) {
-        var return_data = hr.responseText;
-        window.alert(return_data);
+      if(hr.readyState == 4 && hr.status == 200) {  
+        //var return_data = hr.responseXML;
+        var return_data = hr.responseXML;
+        //window.alert(return_data);
       }
     }
     // Send the data to PHP now... and wait for response to update the status div
-    hr.send(vars); // Actually execute the request 
+    // Actually execute the request 
+    hr.send(vars);
 }
+
+function bindInfoWindow(marker, map, infoWindow, html) {
+  google.maps.event.addListener(marker, 'click', function() {
+    infoWindow.setContent(html);
+    infoWindow.open(map, marker);
+  });
+}
+
+function downloadUrl(url,callback) {
+ var request = window.ActiveXObject ?
+     new ActiveXObject('Microsoft.XMLHTTP') :
+     new XMLHttpRequest;
+
+ request.onreadystatechange = function() {
+   if (request.readyState == 4) {
+     request.onreadystatechange = doNothing;
+     callback(request, request.status);
+   }
+ };
+
+ request.open('GET', url, true);
+ request.send(null);
+}
+ 
+function doNothing() {}
 
 google.maps.event.addDomListener(window, 'load', initialize);
