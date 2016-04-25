@@ -3,15 +3,15 @@ var chicago = new google.maps.LatLng(41.85, -87.65);
 var siberia = new google.maps.LatLng(60, 105);
 var initialLocation;
 var browserSupportFlag = new Boolean();
-var GPSlocation;
 var pinModeListener;
+var GPSlocation;
 var editSavedStory = 0;
 
 var editMode = '<div class="container iw-box">' + 
-    '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN" onclick="ajax_post()">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' + '</div>';
+    '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' + '</div>';
 
 var checkMode ='<div class="wrapper iw-box">' + 
-    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">Title</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-content">' + '<p id="saved-story-content">Maecenas at arcu ex. Suspendisse ullamcorper cursus magna, vestibulum posuere sem finibus id. Duis at neque vitae tortor ultrices venenatis vel ut erat. Aenean blandit dolor et laoreet molestie. Aenean vel rhoncus sapien, quis facilisis massa. Donec vulputateros nunc, euismod molestie erat congue eu. Fusce lacinia egestas justo, ullamcorper vehicula lectus convallis ut.</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
+    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">Title</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content"></p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
 
 
 //customize icons of geomarker
@@ -47,6 +47,7 @@ function initialize() {
  //add attr to map
  var mapOptions = {
   zoom: 13,
+  center: siberia,
   disableDefaultUI: true,
   mapTypeControl: true,
   mapTypeControlOptions: {
@@ -70,9 +71,37 @@ function initialize() {
     
  // Insert map to the page
  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+ 
+
+ // Try HTML5 geolocation
+// if(navigator.geolocation) {
+//   navigator.geolocation.getCurrentPosition(function(position) {
+//     initialLocation = new google.maps.LatLng(position.coords.latitude,
+//                                      position.coords.longitude);
+//
+//     var infowindow = new google.maps.InfoWindow({
+//       map: map,
+//       position: initialLocation,
+//       content: 'Location found using HTML5.'
+//     });
+//
+//     map.setCenter(initialLocation);
+//   }, function() {
+//     handleNoGeolocation(true);
+//   });
+// } else {
+//   // Browser doesn't support Geolocation
+//   handleNoGeolocation(false);
+// }
     
- // Try W3C Geolocation (Preferred)
+//    if (navigator.geolocation) {
+//      navigator.geolocation.getCurrentPosition(success);
+//    } else {
+//      error('Geo Location is not supported');
+//    }
+// Try W3C Geolocation (Preferred)
  if (navigator.geolocation) {
+  //console.log('Geolocation is supported!');
   browserSupportFlag = true;
   navigator.geolocation.getCurrentPosition(function(position) {
        initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);   
@@ -80,10 +109,10 @@ function initialize() {
                 map: map,
                 position: initialLocation,
                 icon: geoImg,
-                shape: shape,
+                shape: shape
             });
        map.setZoom(13);      
-       map.setCenter(initialLocation);    
+       //map.setCenter(initialLocation);
   }, function() {
    handleNoGeolocation(browserSupportFlag);
   });
@@ -93,7 +122,7 @@ function initialize() {
   browserSupportFlag = false;
   handleNoGeolocation(browserSupportFlag);
  }
-// End of geo location
+ //End of geo location
  // Create the DIV to hold the CENTER control and call the CenterControl()
  // constructor passing in this DIV.
  var centerControlDiv = document.createElement('div');
@@ -135,6 +164,7 @@ function initialize() {
  var marker = new google.maps.Marker({
   map: map
  });
+
  // Event handling when usr typing in search input field    
  google.maps.event.addListener(autocomplete, 'place_changed', function() {
   infoWindow.close();
@@ -155,29 +185,50 @@ function initialize() {
  });// End of auto complete
     
  //load markers from database    
- downloadUrl("../mainPagePin.php", function(data) {
-  var xml = data.responseXML;
-  var markers = xml.documentElement.getElementsByTagName("marker");
-  console.log(markers.length);
-  for (var i = 0; i < markers.length; i++) {
-    var title = markers[i].getAttribute("title");
-    var content = markers[i].getAttribute("content");
-    var email = markers[i].getAttribute("email");
-    var point = new google.maps.LatLng(
-        parseFloat(markers[i].getAttribute("lat")),
-        parseFloat(markers[i].getAttribute("lng")));
-    var html = '<div class="wrapper iw-box">' + 
-    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-content">' + '<p id="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
-    var marker = new google.maps.Marker({
-      map: map,
-      position: point,
-    });
-    var savedTitle = title;
-    var savedContent = content;
-    bindInfoWindow(marker, map, infoWindow, html, savedTitle, savedContent);
-  }
- });
+// downloadUrl("../mainPagePin.php", function(data) {
+//  var xml = data.responseXML;
+//  var markers = xml.documentElement.getElementsByTagName("marker");
+//  console.log(markers.length);
+//  for (var i = 0; i < markers.length; i++) {
+//    var title = markers[i].getAttribute("title");
+//    var content = markers[i].getAttribute("content");
+//    var email = markers[i].getAttribute("email");
+//    var point = new google.maps.LatLng(
+//        parseFloat(markers[i].getAttribute("lat")),
+//        parseFloat(markers[i].getAttribute("lng")));
+//    // need to get time
+//    var time;
+//    var html = '<div class="wrapper iw-box">' + 
+//    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-content">' + '<p id="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
+//    var marker = new google.maps.Marker({
+//      map: map,
+//      position: point,
+//    });
+//    bindInfoWindow(marker, map, infoWindow, html, title, content, time);
+//  }
+// });
 } // End of function initialize
+
+
+function success(position) {
+     initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+     var marker = new google.maps.Marker({
+          position: initialLocation,
+          map: map,
+         icon: geoImg,
+         shape: shape
+     });   
+     map.setZoom(13);      
+     map.setCenter(initialLocation);
+}
+
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+}
 
 
  // Handling geo location Err
@@ -292,7 +343,6 @@ function PinControl(controlDiv, map) {
 
 //Place Marker
 function placeMarker(location) {
-    //save loaction here
     GPSlocation = location;
     var marker = new google.maps.Marker({
             position: location, 
@@ -326,8 +376,14 @@ function placeMarker(location) {
         var time = saveCreateTime();
         // Need to push the time to database
         //...
-        
-        toCheckMode(infowindow, marker, time);
+        //send data to server
+        var title = document.getElementById("story-title").value;
+        var content = document.getElementById("story-content").value;
+        if (title && content){
+            //only send server valid pin
+            ajax_post();
+        }
+        toCheckMode(infowindow, marker, time, title, content);
         
     });
     
@@ -341,29 +397,41 @@ function placeMarker(location) {
      });
 }
 
-function toCheckMode(infowindow, marker, time){
+function toCheckMode(infowindow, marker, time, title, content){
     //console.log("in toCheckMode");
     infowindow.setContent(checkMode);
-    //update time stamp here
-    document.getElementById('CREATE-time').innerHTML = time;
+    if (title && content){
+        // show user saved pin content
+        document.getElementById('saved-title').innerHTML = title;
+        document.getElementById('saved-story-content').innerHTML = content;
+        //update time stamp here only if user successfully created the marker
+        if (time){
+            document.getElementById('CREATE-time').innerHTML = time;
+        }
+    }
+    
     if (document.getElementById('iw-edit-btn') != null){
         document.getElementById('iw-edit-btn').addEventListener("click", function(){
             //console.log("called from checkMode");
-            toEditMode(infowindow, marker);
+            editSavedStory = 1;
+            toEditMode(infowindow, marker, title, content);
         });
     }
     if (document.getElementById('iw-del-btn') != null){
         document.getElementById('iw-del-btn').addEventListener("click", function(){
                     marker.setMap(null);
-                    var lat = GPSlocation.lat();
-                    var long = GPSlocation.lng();
                     //console.log("del the marker");
-                    //need to send server side   
+                    //need to send server side  
+                    var pos = marker.position;
+                    var lat = pos.lat();
+                    var lng = pos.lng();
         });     
     }  
 }
 
 function toEditMode(infowindow, marker, title, content){
+    // need saved time from database
+    var time = null;
     //console.log("in toEditMode");
     if (editSavedStory == 0){
         infowindow.setContent(editMode);
@@ -371,20 +439,37 @@ function toEditMode(infowindow, marker, title, content){
     else {
         //editsavedStory = 1
         infowindow.setContent(editMode);
-        document.getElementById('story-title').value = title;
-        document.getElementById('story-content').value = content;
+        if (title){
+            document.getElementById('story-title').value = title;
+        }
+        if (content){
+            document.getElementById('story-content').value = content;
+        }
         editSavedStory = 0;
     }
     if (document.getElementById('cancel')){
         document.getElementById('cancel').addEventListener("click", function(){
             //console.log("called from EditMode, edit");
-            toCheckMode(infowindow, marker);
+            toCheckMode(infowindow, marker, time, title, content);
         });
     }
     if (document.getElementById('PIN')){
         document.getElementById('PIN').addEventListener("click", function(){
             //console.log("called from EditMode, PIN");
-            toCheckMode(infowindow, marker);
+            // check if user has changed saved values
+            var title0 = document.getElementById('story-title').value;
+            var content0 = document.getElementById('story-content').value;
+            if(title0 != title || content0 != content){
+                time = saveCreateTime();
+                // update info data in database
+                ajax_post();
+                // update infowindow if user changed anything
+                toCheckMode(infowindow, marker, time, title0, content0);
+                
+            }
+            else {
+             toCheckMode(infowindow, marker, time, title, content);   
+            } 
         });
     }
 }
@@ -411,29 +496,34 @@ function ajax_post(){
     var url = "parse_pin.php";
     var title = document.getElementById("story-title").value;
     var content = document.getElementById("story-content").value;
+    // issues when user update saved marker
     var lat = GPSlocation.lat();
     var long = GPSlocation.lng();
     
-    // Need to check user input?
-    
-    var vars = "title="+title+"&content="+content + "&latitude="+lat+"&longitude="+ long;
-    hr.open("POST", url, true);
-    // Set content type header information for sending url encoded variables in the request
-    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // Access the onreadystatechange event for the XMLHttpRequest object
-    hr.onreadystatechange = function() {
-      if(hr.readyState == 4 && hr.status == 200) {  
-        //var return_data = hr.responseXML;
-        var return_data = hr.responseXML;
-        //window.alert(return_data);
-      }
+    // Need to check user input
+    if (title && content){
+        var vars = "title="+title+"&content="+content + "&latitude="+lat+"&longitude="+ long;
+        hr.open("POST", url, true);
+        // Set content type header information for sending url encoded variables in the request
+        hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        // Access the onreadystatechange event for the XMLHttpRequest object
+        hr.onreadystatechange = function() {
+          if(hr.readyState == 4 && hr.status == 200) {  
+            //var return_data = hr.responseXML;
+            var return_data = hr.responseXML;
+            //window.alert(return_data);
+          }
+        }
+        // Send the data to PHP now... and wait for response to update the status div
+        // Actually execute the request 
+        hr.send(vars);
     }
-    // Send the data to PHP now... and wait for response to update the status div
-    // Actually execute the request 
-    hr.send(vars);
+    else {
+        // won't save this marker   
+    }
 }
 
-function bindInfoWindow(marker, map, infoWindow, html, title, content) {
+function bindInfoWindow(marker, map, infoWindow, html, title, content, time) {
   google.maps.event.addListener(marker, 'click', function() {
     infoWindow.setContent(html);
     infoWindow.open(map, marker);
@@ -443,9 +533,11 @@ function bindInfoWindow(marker, map, infoWindow, html, title, content) {
     });
     document.getElementById('iw-del-btn').addEventListener("click", function(){
          marker.setMap(null);
-         var lat = GPSlocation.lat();
-         var long = GPSlocation.lng();
+         var pos = marker.position;
+         var lat = pos.lat();
+         var lng = pos.lng();
          //need to send server side
+         // ...
      });         
   });
 }
