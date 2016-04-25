@@ -47,7 +47,8 @@ function initialize() {
  //add attr to map
  var mapOptions = {
   zoom: 13,
-  center: siberia,
+  //center: siberia,
+  center: chicago,
   disableDefaultUI: true,
   mapTypeControl: true,
   mapTypeControlOptions: {
@@ -112,7 +113,7 @@ function initialize() {
                 shape: shape
             });
        map.setZoom(13);      
-       //map.setCenter(initialLocation);
+       map.setCenter(initialLocation);
   }, function() {
    handleNoGeolocation(browserSupportFlag);
   });
@@ -185,31 +186,32 @@ function initialize() {
  });// End of auto complete
     
  //load markers from database    
-// downloadUrl("../mainPagePin.php", function(data) {
-//  var xml = data.responseXML;
-//  var markers = xml.documentElement.getElementsByTagName("marker");
-//  console.log(markers.length);
-//  for (var i = 0; i < markers.length; i++) {
-//    var title = markers[i].getAttribute("title");
-//    var content = markers[i].getAttribute("content");
-//    var email = markers[i].getAttribute("email");
-//    var point = new google.maps.LatLng(
-//        parseFloat(markers[i].getAttribute("lat")),
-//        parseFloat(markers[i].getAttribute("lng")));
-//    // need to get time
-//    var time = markers[i].getAttribute("time");
-//    var html = '<div class="wrapper iw-box">' + 
-//    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer" id="user-id">' + '<div id="iw-user-icon-container">' + '<img src="http://icons.iconarchive.com/icons/designbolts/free-multimedia/1024/iMac-icon.png" alt="" id="iw-user-icon">' + '</div>' + '<div id="iw-user-name-container">' + '<span id="iw-user-name">Name</span>' + '</div>' + '</div>' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">'+ time +'</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>'; 
-//      
-//      
-//     
-//    var marker = new google.maps.Marker({
-//      map: map,
-//      position: point,
-//    });
-//    bindInfoWindow(marker, map, infoWindow, html, title, content, time);
-//  }
-// });
+ downloadUrl("../mainPagePin.php", function(data) {
+  var xml = data.responseXML;
+  if (xml){
+      var markers = xml.documentElement.getElementsByTagName("marker");
+      for (var i = 0; i < markers.length; i++) {
+        var title = markers[i].getAttribute("title");
+        var content = markers[i].getAttribute("content");
+        var email = markers[i].getAttribute("email");
+        var point = new google.maps.LatLng(
+            parseFloat(markers[i].getAttribute("lat")),
+            parseFloat(markers[i].getAttribute("lng")));
+        // need to get time
+        var time = markers[i].getAttribute("time");
+        var html = '<div class="wrapper iw-box">' + 
+        '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer" id="user-id">' + '<div id="iw-user-icon-container">' + '<img src="http://icons.iconarchive.com/icons/designbolts/free-multimedia/1024/iMac-icon.png" alt="" id="iw-user-icon">' + '</div>' + '<div id="iw-user-name-container">' + '<span id="iw-user-name">Name</span>' + '</div>' + '</div>' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">'+ time +'</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>'; 
+
+
+
+        var marker = new google.maps.Marker({
+          map: map,
+          position: point,
+        });
+        bindInfoWindow(marker, map, infoWindow, html, title, content, time);
+      }
+    }
+ });
 } // End of function initialize
 
 
