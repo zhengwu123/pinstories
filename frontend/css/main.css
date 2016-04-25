@@ -129,6 +129,7 @@ fieldset {
     background-color: #f4a728;
     border-color: white;
     background-image: none;
+    margin: auto;
 }
 
 a.navbar-brand.navbar-brand-custom {

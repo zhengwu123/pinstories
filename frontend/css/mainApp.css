@@ -179,6 +179,7 @@ div.row.top-buffer {
     margin-right: 0.6em;
 }
 
+
 /* ==========================================================================
    Check Mode
    ========================================================================== */
@@ -192,7 +193,7 @@ div.row.top-buffer {
 #story-content-container {
   padding-top: 2em;
   padding-bottom: 2em;
-  height: 65%;
+  height: 50%;
   margin-left: -1.2em;
   margin-right: 0;
 }
