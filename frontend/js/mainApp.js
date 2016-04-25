@@ -11,7 +11,7 @@ var editMode = '<div class="container iw-box">' +
     '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' + '</div>';
 
 var checkMode ='<div class="wrapper iw-box">' + 
-    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">Title</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content"></p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
+    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer" id="user-id">' + '<div id="iw-user-icon-container">' + '<img src="http://icons.iconarchive.com/icons/designbolts/free-multimedia/1024/iMac-icon.png" alt="" id="iw-user-icon">' + '</div>' + '<div id="iw-user-name-container">' + '<span id="iw-user-name">Name</span>' + '</div>' + '</div>' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">Title</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content"></p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
 
 
 //customize icons of geomarker
@@ -197,9 +197,12 @@ function initialize() {
 //        parseFloat(markers[i].getAttribute("lat")),
 //        parseFloat(markers[i].getAttribute("lng")));
 //    // need to get time
-//    var time;
+//    var time = markers[i].getAttribute("time");
 //    var html = '<div class="wrapper iw-box">' + 
-//    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-content">' + '<p id="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
+//    '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer" id="user-id">' + '<div id="iw-user-icon-container">' + '<img src="http://icons.iconarchive.com/icons/designbolts/free-multimedia/1024/iMac-icon.png" alt="" id="iw-user-icon">' + '</div>' + '<div id="iw-user-name-container">' + '<span id="iw-user-name">Name</span>' + '</div>' + '</div>' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">'+ time +'</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>'; 
+//      
+//      
+//     
 //    var marker = new google.maps.Marker({
 //      map: map,
 //      position: point,
@@ -421,10 +424,8 @@ function toCheckMode(infowindow, marker, time, title, content){
         document.getElementById('iw-del-btn').addEventListener("click", function(){
                     marker.setMap(null);
                     //console.log("del the marker");
-                    //need to send server side  
-                    var pos = marker.position;
-                    var lat = pos.lat();
-                    var lng = pos.lng();
+                    //need to send server side 
+                    
         });     
     }  
 }
@@ -484,7 +485,9 @@ function saveCreateTime(){
     var year = currentTime.getFullYear();		
     var hour= currentTime.getHours();		
     var min = currentTime.getMinutes();		
-    var sec = currentTime.getSeconds();		
+    var sec = currentTime.getSeconds();	
+    if (month<10) month="0"+month;
+    if (day<10) day="0"+day;
     var time = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;		
     return time;		
 }
@@ -529,15 +532,20 @@ function bindInfoWindow(marker, map, infoWindow, html, title, content, time) {
     infoWindow.open(map, marker);
     document.getElementById('iw-edit-btn').addEventListener("click", function(){
         editSavedStory = 1;
+        GPSlocation = marker.position;
         toEditMode(infoWindow, marker, title, content);
     });
     document.getElementById('iw-del-btn').addEventListener("click", function(){
-         marker.setMap(null);
+         //console.log("hit del");
+         
          var pos = marker.position;
          var lat = pos.lat();
          var lng = pos.lng();
+         //console.log(lat);
          //need to send server side
-         // ...
+                    var vars = "title="+title+"&content="+content + "&latitude="+lat+"&longitude="+ lng;
+                    delete_marker(vars);
+                    marker.setMap(null);
      });         
   });
 }
@@ -559,5 +567,21 @@ function downloadUrl(url,callback) {
 }
  
 function doNothing() {}
+//code below delete markers on database
+function delete_marker(params) {
+    var httpc = new XMLHttpRequest(); // simplified for clarity
+    var url = "delete_marker.php";
+    httpc.open("POST", url, true); // sending as POST
+
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    //httpc.setRequestHeader("Content-Length", params.length); // POST request MUST have a Content-Length header (as per HTTP/1.1)
+
+    httpc.onreadystatechange = function() { //Call a function when the state changes.
+    if(httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
+        alert(httpc.responseText); // some processing here, or whatever you want to do with the response
+        }
+    }
+    httpc.send(params);
+}
 
 google.maps.event.addDomListener(window, 'load', initialize);

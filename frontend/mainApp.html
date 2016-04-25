@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-7" id ="profile-username-container">
                               <!--what if the name is so long? -->
-                              <span id="profile-username">Name</span>
+                              <span id="profile-username"><?php echo $_SESSION['firstname']; ?></span>
                             </div>
                           </div><!-- End of row -->
                         </div>
@@ -48,7 +48,10 @@
                         <a href="#">My Profile</a>
                     </li>
                     <li>
-                        <a href="#">My Pins</a>
+                        <a href="mainApp.php">My Pins</a>
+                    </li>
+                     <li>
+                        <a href="#">My Friends</a>
                     </li>
                     <li>
                         <a href="logout.php">Log out</a>

@@ -164,6 +164,8 @@ div.row.top-buffer {
     margin-right: 0.6em;
 }
 
+/* checkMode */
+
 .iw-buttons {
     padding-top: 0.5em;
     float: right;
@@ -201,6 +203,38 @@ div.row.top-buffer {
    /* border: solid 3px grey; */
    display: inline;
    top: 1.2em;
+}
+
+#user-id {
+/*  border: dotted 3px black;*/
+  display: relative;
+  height: 5.5em;
+}
+
+#iw-user-icon-container {
+    display: inline;
+    width: 25%;
+}
+
+#iw-user-icon {
+/*  border: solid 3px grey;*/
+  width: auto;
+  height: auto;
+  max-width: 5em;
+  max-height: 5em;
+}
+
+#iw-user-name-container {
+    display: inline;
+}
+
+#iw-user-name {
+/*  border: solid 3px grey;*/
+    float: right;
+    padding-top: 0.3em;
+    padding-right: 14.9em;
+    font-size: 1.05em;
+    font-weight: bolder;  
 }
 
 
