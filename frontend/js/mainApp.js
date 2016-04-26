@@ -6,9 +6,9 @@ var browserSupportFlag = new Boolean();
 var pinModeListener;
 var GPSlocation;
 var editSavedStory = 0;
-
+var markers = [];
 var editMode = '<div class="container iw-box">' + 
-    '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' + '</div>';
+    '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' +'<div>'+'<span id="time" name="time">TIME</span>'+'</div>'+ '</div>';
 
 var checkMode ='<div class="wrapper iw-box">' + 
     '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer" id="user-id">' + '<div id="iw-user-icon-container">' + '<img src="http://icons.iconarchive.com/icons/designbolts/free-multimedia/1024/iMac-icon.png" alt="" id="iw-user-icon">' + '</div>' + '<div id="iw-user-name-container">' + '<span id="iw-user-name">Name</span>' + '</div>' + '</div>' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">Title</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content"></p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">TIME</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>';
@@ -189,7 +189,7 @@ function initialize() {
  downloadUrl("../mainPagePin.php", function(data) {
   var xml = data.responseXML;
   if (xml){
-      var markers = xml.documentElement.getElementsByTagName("marker");
+      markers = xml.documentElement.getElementsByTagName("marker");
       for (var i = 0; i < markers.length; i++) {
         var title = markers[i].getAttribute("title");
         var content = markers[i].getAttribute("content");
@@ -198,9 +198,10 @@ function initialize() {
             parseFloat(markers[i].getAttribute("lat")),
             parseFloat(markers[i].getAttribute("lng")));
         // need to get time
+        var owner = markers[i].getAttribute("owner");
         var time = markers[i].getAttribute("time");
         var html = '<div class="wrapper iw-box">' + 
-        '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer" id="user-id">' + '<div id="iw-user-icon-container">' + '<img src="http://icons.iconarchive.com/icons/designbolts/free-multimedia/1024/iMac-icon.png" alt="" id="iw-user-icon">' + '</div>' + '<div id="iw-user-name-container">' + '<span id="iw-user-name">Name</span>' + '</div>' + '</div>' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">'+ time +'</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>'; 
+        '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer" id="user-id">' + '<div id="iw-user-icon-container">' + '<img src="http://icons.iconarchive.com/icons/designbolts/free-multimedia/1024/iMac-icon.png" alt="" id="iw-user-icon">' + '</div>' + '<div id="iw-user-name-container">' + '<span id="iw-user-name">'+ owner +'</span>' + '</div>' + '</div>' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">'+ time +'</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>'; 
 
 
 
@@ -208,7 +209,7 @@ function initialize() {
           map: map,
           position: point,
         });
-        bindInfoWindow(marker, map, infoWindow, html, title, content, time);
+        bindInfoWindow(marker, map, infoWindow, html, title, content, time, owner);
       }
     }
  });
@@ -388,8 +389,7 @@ function placeMarker(location) {
             //only send server valid pin
             ajax_post();
         }
-        toCheckMode(infowindow, marker, time, title, content);
-        
+        toCheckMode(infowindow, marker, title, content, time);
     });
     
     // Close infoWindows when user click on map
@@ -397,12 +397,12 @@ function placeMarker(location) {
          infowindow.close();
          //console.log("called from map");
          google.maps.event.addListener(marker, 'click', function(event) {
-            toCheckMode(infowindow, marker, time);
+            toCheckMode(infowindow, marker);
         });
      });
-}
+}// End of place marker
 
-function toCheckMode(infowindow, marker, time, title, content){
+function toCheckMode(infowindow, marker, title, content, time, owner){
     //console.log("in toCheckMode");
     infowindow.setContent(checkMode);
     if (title && content){
@@ -414,12 +414,26 @@ function toCheckMode(infowindow, marker, time, title, content){
             document.getElementById('CREATE-time').innerHTML = time;
         }
     }
+    else {
+        if (title){
+            document.getElementById('saved-title').innerHTML = title;
+        }
+        if (content){
+            document.getElementById('saved-story-content').innerHTML = content;
+        }
+    }
+    if (owner){
+            document.getElementById('iw-user-name').innerHTML = owner;
+        }
+        else {
+            document.getElementById('iw-user-name').innerHTML = document.getElementById('profile-username').innerHTML;
+        }
     
     if (document.getElementById('iw-edit-btn') != null){
         document.getElementById('iw-edit-btn').addEventListener("click", function(){
             //console.log("called from checkMode");
             editSavedStory = 1;
-            toEditMode(infowindow, marker, title, content);
+            toEditMode(infowindow, marker, title, content, time, owner);
         });
     }
     if (document.getElementById('iw-del-btn') != null){
@@ -427,15 +441,13 @@ function toCheckMode(infowindow, marker, time, title, content){
                     marker.setMap(null);
                     //console.log("del the marker");
                     //need to send server side 
-                    
         });     
     }  
 }
 
-function toEditMode(infowindow, marker, title, content){
-    // need saved time from database
-    var time = null;
+function toEditMode(infowindow, marker, title, content, time, owner){
     //console.log("in toEditMode");
+    //console.log(time);
     if (editSavedStory == 0){
         infowindow.setContent(editMode);
     }
@@ -453,7 +465,7 @@ function toEditMode(infowindow, marker, title, content){
     if (document.getElementById('cancel')){
         document.getElementById('cancel').addEventListener("click", function(){
             //console.log("called from EditMode, edit");
-            toCheckMode(infowindow, marker, time, title, content);
+            toCheckMode(infowindow, marker, title, content, time, owner);
         });
     }
     if (document.getElementById('PIN')){
@@ -463,15 +475,16 @@ function toEditMode(infowindow, marker, title, content){
             var title0 = document.getElementById('story-title').value;
             var content0 = document.getElementById('story-content').value;
             if(title0 != title || content0 != content){
-                time = saveCreateTime();
+                var time_new = saveCreateTime();
+                document.getElementById('time').value = time_new;
                 // update info data in database
                 ajax_post();
                 // update infowindow if user changed anything
-                toCheckMode(infowindow, marker, time, title0, content0);
-                
+                toCheckMode(infowindow, marker, title0, content0, time_new, owner); 
             }
             else {
-             toCheckMode(infowindow, marker, time, title, content);   
+             //console.log(time);
+             toCheckMode(infowindow, marker,  title, content, time, owner);   
             } 
         });
     }
@@ -501,6 +514,7 @@ function ajax_post(){
     var url = "parse_pin.php";
     var title = document.getElementById("story-title").value;
     var content = document.getElementById("story-content").value;
+    var time = document.getElementById("time").value;
     // issues when user update saved marker
     var lat = GPSlocation.lat();
     var long = GPSlocation.lng();
@@ -528,14 +542,14 @@ function ajax_post(){
     }
 }
 
-function bindInfoWindow(marker, map, infoWindow, html, title, content, time) {
+function bindInfoWindow(marker, map, infoWindow, html, title, content, time, owner) {
   google.maps.event.addListener(marker, 'click', function() {
     infoWindow.setContent(html);
     infoWindow.open(map, marker);
     document.getElementById('iw-edit-btn').addEventListener("click", function(){
         editSavedStory = 1;
         GPSlocation = marker.position;
-        toEditMode(infoWindow, marker, title, content);
+        toEditMode(infoWindow, marker, title, content, time, owner);
     });
     document.getElementById('iw-del-btn').addEventListener("click", function(){
          //console.log("hit del");
@@ -580,10 +594,37 @@ function delete_marker(params) {
 
     httpc.onreadystatechange = function() { //Call a function when the state changes.
     if(httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
-        alert(httpc.responseText); // some processing here, or whatever you want to do with the response
+        //alert(httpc.responseText); // some processing here, or whatever you want to do with the response
         }
     }
     httpc.send(params);
 }
 
+function getPinsInRange(radius){
+        clearLocations();
+      var center = map.getCenter();
+        var center_lat = center.lat();
+        var center_lng = center.lng();
+var httpc = new XMLHttpRequest(); // simplified for clarity
+    var url = "findPinsInRange.php";
+    httpc.open("POST", url, true); // sending as POST
+    var vars = "center_lat="+center_lat+"&center_lng="+center_lng + "&radius="+radius;
+    httpc.setRequestHeader("Content-Type", "text/xml");
+    //httpc.setRequestHeader("Content-Length", params.length); // POST request MUST have a Content-Length header (as per HTTP/1.1)
+
+    httpc.onreadystatechange = function() { //Call a function when the state changes.
+    if(httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
+        alert(httpc.responseText); // some processing here, or whatever you want to do with the response
+        }
+    }
+    httpc.send(vars);
+
+}
+
+function clearLocations() {
+  infoWindow.close();
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+}
 google.maps.event.addDomListener(window, 'load', initialize);
