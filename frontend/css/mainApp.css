@@ -196,6 +196,7 @@ div.row.top-buffer {
   height: 50%;
   margin-left: -1.2em;
   margin-right: 0;
+  overflow: auto;
 }
 
 #saved-title {
