@@ -9,7 +9,7 @@ Pinstories is a web application for users to share stories according to location
 - [ ] As a user, I would like to reply to a post
 - [ ] As a user, I would like to like or dislike a post
 - [ ] As a user, I would like to search for friends.
-- [ ] As a user, I would like to view pins around me.
+- [X] As a user, I would like to view pins around me.
 - [ ] As a user, I would like to have a profile.
 
 
