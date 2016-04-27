@@ -6,7 +6,7 @@ var browserSupportFlag = new Boolean();
 var pinModeListener;
 var GPSlocation;
 var editSavedStory = 0;
-var markers = [];
+var markersArray =[];
 var editMode = '<div class="container iw-box">' + 
     '<form action="" data-toggle="validator" role="form" id="pin-story">'+'<div class="container vertical">' +'<!-- Story Title--><div class="row top-buffer">' +'<div class="form-group has-feedback">' + '<input type="text" class="form-control" id="story-title" name="story-title" placeholder="Title" required>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Title --><!-- Story --><div class="row top-buffer">'+'<div class="form-group has-feedback">' + '<textarea class="form-control" rows="8" id="story-content" name="story-content" placeholder="Say something..." required></textarea>' +'<span class="glyphicon form-control-feedback" aria-hidden="true"></span>'+'<div class="help-block with-errors"></div>'+'</div>'+'</div>'+'<!-- End of Story --><!-- Sumbit and Cancel Button --><div class="row top-buffer iw-buttons">' + '<div class="form-inline">' + '<button type="button" class="btn btn-success btn-sm" id="PIN" name="PIN">PIN</button>' + '<button type="button" class="btn btn-warning btn-sm" id="cancel" name="cancel">Cancel</button>'+ '</div>' +'</div>' + '</div>' + '</form>' +'<div>'+'<span id="time" name="time">TIME</span>'+'</div>'+ '</div>';
 
@@ -110,7 +110,9 @@ function initialize() {
                 map: map,
                 position: initialLocation,
                 icon: geoImg,
-                shape: shape
+                shape: shape,
+                animation: google.maps.Animation.DROP,
+                title: 'YOU'
             });
        map.setZoom(13);      
        map.setCenter(initialLocation);
@@ -186,11 +188,27 @@ function initialize() {
  });// End of auto complete
     
  //load markers from database    
- downloadUrl("../mainPagePin.php", function(data) {
+ loadMarkers();
+ // Add event handling to pins in 50 mile
+ document.getElementById('searchNearLocation').addEventListener('click', function(){
+     getPinsInRange(50);
+     map.setZoom(13);
+ });
+ document.getElementById('myPins').addEventListener('click', function(){
+     clearLocations();
+     loadMarkers();
+     map.setZoom(4);
+ });
+} // End of function initialize
+
+function loadMarkers(){
+    downloadUrl("../mainPagePin.php", function(data) {
   var xml = data.responseXML;
   if (xml){
-      markers = xml.documentElement.getElementsByTagName("marker");
+      var markers = xml.documentElement.getElementsByTagName("marker");
+      console.log("curr number is " + markers.length);
       for (var i = 0; i < markers.length; i++) {
+
         var title = markers[i].getAttribute("title");
         var content = markers[i].getAttribute("content");
         var email = markers[i].getAttribute("email");
@@ -200,6 +218,7 @@ function initialize() {
         // need to get time
         var owner = markers[i].getAttribute("owner");
         var time = markers[i].getAttribute("time");
+        markers[i] = marker;
         var html = '<div class="wrapper iw-box">' + 
         '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer" id="user-id">' + '<div id="iw-user-icon-container">' + '<img src="http://icons.iconarchive.com/icons/designbolts/free-multimedia/1024/iMac-icon.png" alt="" id="iw-user-icon">' + '</div>' + '<div id="iw-user-name-container">' + '<span id="iw-user-name">'+ owner +'</span>' + '</div>' + '</div>' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">'+ time +'</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>'; 
 
@@ -209,11 +228,12 @@ function initialize() {
           map: map,
           position: point,
         });
+        markersArray.push(marker);
         bindInfoWindow(marker, map, infoWindow, html, title, content, time, owner);
       }
     }
  });
-} // End of function initialize
+}
 
 
 function success(position) {
@@ -354,6 +374,7 @@ function placeMarker(location) {
             position: location, 
             //later might only enable owner of pin to drag 
             draggable: true,
+            animation: google.maps.Animation.DROP,
             map: map
         });
     map.panTo(location);
@@ -387,7 +408,16 @@ function placeMarker(location) {
         var content = document.getElementById("story-content").value;
         if (title && content){
             //only send server valid pin
+            console.log("user created a pin");
+            markersArray.push(marker);
+            console.log(isInfoWindowOpen(infowindow));
             ajax_post();
+//             google.maps.event.addListener(map, 'click', function(){
+//                 if(!isInfoWindowOpen(infowindow)){
+//                     console.log("window closed");
+//                     ajax_post();
+//                 }
+//            });
         }
         toCheckMode(infowindow, marker, title, content, time);
     });
@@ -438,11 +468,22 @@ function toCheckMode(infowindow, marker, title, content, time, owner){
     }
     if (document.getElementById('iw-del-btn') != null){
         document.getElementById('iw-del-btn').addEventListener("click", function(){
-                    marker.setMap(null);
                     //console.log("del the marker");
                     //need to send server side 
+                    var pos = marker.position;
+                    var lat = pos.lat();
+                    var lng = pos.lng();
+                    //console.log(lat);
+                    //need to send server side
+                    var vars = "title="+title+"&content="+content + "&latitude="+lat+"&longitude="+ lng;
+                    delete_marker(vars);
+                    marker.setMap(null);
         });     
-    }  
+    }
+//    google.maps.event.addListener(map, 'click', function(){
+//        //infoWindow.close();
+//        updateMarkers();
+//    });
 }
 
 function toEditMode(infowindow, marker, title, content, time, owner){
@@ -478,6 +519,7 @@ function toEditMode(infowindow, marker, title, content, time, owner){
                 var time_new = saveCreateTime();
                 document.getElementById('time').value = time_new;
                 // update info data in database
+                markersArray.push(marker);
                 ajax_post();
                 // update infowindow if user changed anything
                 toCheckMode(infowindow, marker, title0, content0, time_new, owner); 
@@ -503,43 +545,11 @@ function saveCreateTime(){
     var sec = currentTime.getSeconds();	
     if (month<10) month="0"+month;
     if (day<10) day="0"+day;
+    if (hour<10) hour="0"+hour;
+    if (min<10) min="0"+min;
+    if (sec<10) sec="0"+sec;
     var time = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;		
     return time;		
-}
-
-function ajax_post(){
-    // Create our XMLHttpRequest object
-    var hr = new XMLHttpRequest();
-    // Create some variables we need to send to our PHP file
-    var url = "parse_pin.php";
-    var title = document.getElementById("story-title").value;
-    var content = document.getElementById("story-content").value;
-    var time = document.getElementById("time").value;
-    // issues when user update saved marker
-    var lat = GPSlocation.lat();
-    var long = GPSlocation.lng();
-    
-    // Need to check user input
-    if (title && content){
-        var vars = "title="+title+"&content="+content + "&latitude="+lat+"&longitude="+ long;
-        hr.open("POST", url, true);
-        // Set content type header information for sending url encoded variables in the request
-        hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        // Access the onreadystatechange event for the XMLHttpRequest object
-        hr.onreadystatechange = function() {
-          if(hr.readyState == 4 && hr.status == 200) {  
-            //var return_data = hr.responseXML;
-            var return_data = hr.responseXML;
-            //window.alert(return_data);
-          }
-        }
-        // Send the data to PHP now... and wait for response to update the status div
-        // Actually execute the request 
-        hr.send(vars);
-    }
-    else {
-        // won't save this marker   
-    }
 }
 
 function bindInfoWindow(marker, map, infoWindow, html, title, content, time, owner) {
@@ -583,6 +593,8 @@ function downloadUrl(url,callback) {
 }
  
 function doNothing() {}
+
+
 //code below delete markers on database
 function delete_marker(params) {
     var httpc = new XMLHttpRequest(); // simplified for clarity
@@ -600,31 +612,129 @@ function delete_marker(params) {
     httpc.send(params);
 }
 
+function ajax_post(){
+    // Create our XMLHttpRequest object
+    var hr = new XMLHttpRequest();
+    // Create some variables we need to send to our PHP file
+    var url = "parse_pin.php";
+    var title = document.getElementById("story-title").value;
+    var content = document.getElementById("story-content").value;
+    var time = document.getElementById("time").value;
+    // issues when user update saved marker
+    var lat = GPSlocation.lat();
+    var long = GPSlocation.lng();
+    
+    // Need to check user input
+    if (title && content){
+        var vars = "title="+title+"&content="+content + "&latitude="+lat+"&longitude="+ long;
+        hr.open("POST", url, true);
+        // Set content type header information for sending url encoded variables in the request
+        hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        // Access the onreadystatechange event for the XMLHttpRequest object
+        hr.onreadystatechange = function() {
+          if(hr.readyState == 4 && hr.status == 200) {  
+            //var return_data = hr.responseXML;
+            var return_data = hr.responseXML;
+            //window.alert(return_data);
+            // Update markers on map
+            updateMarkers();
+          }
+        }
+        // Send the data to PHP now... and wait for response to update the status div
+        // Actually execute the request 
+        hr.send(vars);
+    }
+    else {
+        // won't save this marker   
+    }
+}
+
+function updateMarkers(){
+    google.maps.event.addListener(map, 'click', function(){
+         clearLocations();
+         loadMarkers();
+    });
+}
+
+function isInfoWindowOpen(infoWindow){
+    var map = infoWindow.getMap();
+    return (map !== null && typeof map !== "undefined");
+}
+
+
+
 function getPinsInRange(radius){
         clearLocations();
-      var center = map.getCenter();
+        var center = map.getCenter();
         var center_lat = center.lat();
         var center_lng = center.lng();
-var httpc = new XMLHttpRequest(); // simplified for clarity
-    var url = "findPinsInRange.php";
-    httpc.open("POST", url, true); // sending as POST
-    var vars = "center_lat="+center_lat+"&center_lng="+center_lng + "&radius="+radius;
-    httpc.setRequestHeader("Content-Type", "text/xml");
-    //httpc.setRequestHeader("Content-Length", params.length); // POST request MUST have a Content-Length header (as per HTTP/1.1)
+        var infoWindow = new google.maps.InfoWindow();
+    
+        var httpc = new XMLHttpRequest(); // simplified for clarity
+        var url = "findPinsInRange.php";
+        httpc.open("POST", url, true); // sending as POST
+        //var vars = "title="+title+"&content="+content + "&latitude="+lat+"&longitude="+ long;
+        var vars = "center_lat="+center_lat+"&center_lng="+center_lng + "&radius="+radius;
+        //httpc.setRequestHeader("Content-Type", "text/xml");
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        //httpc.setRequestHeader("Content-Length", params.length); // POST request MUST have a Content-Length header (as per HTTP/1.1)
+        
+        //Call a function when the state changes.
+        httpc.onreadystatechange = function() { 
+        if(httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
+           // some processing here, or whatever you want to do with the response
+             httpc.onreadystatechange = doNothing;
+             //alert(httpc.responseXML);
+             //alert(httpc.responseText);
+             var xml = httpc.responseXML;
+             var markerNodes = xml.documentElement.getElementsByTagName("marker");
+             var bounds = new google.maps.LatLngBounds();
+             console.log(markerNodes.length);
+             for (var i = 0; i < markerNodes.length; i++) {
+                  var title = markerNodes[i].getAttribute("title");
+                var content = markerNodes[i].getAttribute("content");
+                var email = markerNodes[i].getAttribute("email");
+                var point = new google.maps.LatLng(
+                    parseFloat(markerNodes[i].getAttribute("lat")),
+                    parseFloat(markerNodes[i].getAttribute("lng")));
+                // need to get time
+                var owner = markerNodes[i].getAttribute("owner");
+                var time = markerNodes[i].getAttribute("time");
+                markerNodes[i] = marker;
+                var html = '<div class="wrapper iw-box">' + 
+                '<div class="container vertical" id = "saved-content-all">' + '<div class="row top-buffer" id="user-id">' + '<div id="iw-user-icon-container">' + '<img src="http://icons.iconarchive.com/icons/designbolts/free-multimedia/1024/iMac-icon.png" alt="" id="iw-user-icon">' + '</div>' + '<div id="iw-user-name-container">' + '<span id="iw-user-name">'+ owner +'</span>' + '</div>' + '</div>' + '<div class="row top-buffer">' + '<span id="saved-title" name="saved-title">' + title + '</span>' + '</div>' + '<div class="row top-buffer" id="story-content-container" name="saved-story-container">' + '<p id="saved-story-content" name="saved-story-content">' + content +'</p>' + '</div>' + '<div class="row top-buffer">'+'<div class="form-inline" id="bottom-row-layout">' + '<div id = "time-stamp">' + '<span id="CREATE-time" name="CREATE-time">'+ time +'</span>' + '</div>' + '<div class="iw-buttons">' +'<button type="button" class="btn btn-info btn-sm" id="iw-edit-btn">Edit</button>' + '<button type="button" class="btn btn-warning btn-sm" id="iw-del-btn">Delete</button>' + '</div>' +'</div>' + '</div>' + '</div>' +'</div>'; 
 
-    httpc.onreadystatechange = function() { //Call a function when the state changes.
-    if(httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
-        alert(httpc.responseText); // some processing here, or whatever you want to do with the response
+                var marker = new google.maps.Marker({
+                  map: map,
+                  position: point,
+                });
+                markersArray.push(marker);
+                //console.log(markersArray.length);
+                bindInfoWindow(marker, map, infoWindow, html, title, content, time, owner);
+             }
+            }
         }
-    }
-    httpc.send(vars);
+        httpc.send(vars);
 
 }
 
 function clearLocations() {
   infoWindow.close();
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
+  if(markersArray){
+      for (var i = 0; i < markersArray.length; i++) {
+        markersArray[i].setMap(null);
+      }
+    markersArray.length = 0;
   }
 }
+
+function parseXml(str) {
+      if (window.ActiveXObject) {
+        var doc = new ActiveXObject('Microsoft.XMLDOM');
+        doc.loadXML(str);
+        return doc;
+      } else if (window.DOMParser) {
+        return (new DOMParser).parseFromString(str, 'text/xml');
+      }
+    }
 google.maps.event.addDomListener(window, 'load', initialize);
